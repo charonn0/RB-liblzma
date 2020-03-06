@@ -29,7 +29,7 @@ Private Class LZMAEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncoderActions, ReadCount As Int64 = -1) As Boolean
+		Protected Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncoderActions, ReadCount As Int64) As Boolean
 		  If Not IsOpen Then
 		    Return False
 		  End If
