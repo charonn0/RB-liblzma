@@ -7,7 +7,7 @@ Inherits LZMAEngine
 		  Const UINT64_MAX = &hffffffffffffffff
 		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
 		  If Flags = 0 Then Flags = LZMA_CONCATENATED
-		  mLastError = lzma_stream_decoder(mStream, MemoryLimit, Flags)
+		  mLastError = lzma_auto_decoder(mStream, MemoryLimit, Flags)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		End Sub
 	#tag EndMethod

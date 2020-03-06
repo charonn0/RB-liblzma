@@ -56,6 +56,10 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_auto_decoder Lib "liblzma" (ByRef Stream As lzma_stream, MemLimit As UInt64, Flags As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_check_is_supported Lib "liblzma" (CheckType As ChecksumType) As Boolean
 	#tag EndExternalMethod
 
@@ -77,10 +81,6 @@ Protected Module LZMA
 
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_end Lib "liblzma" (ByRef Stream As lzma_stream) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_stream_decoder Lib "liblzma" (ByRef Stream As lzma_stream, MemLimit As UInt64, Flags As UInt32) As ErrorCodes
 	#tag EndExternalMethod
 
 
