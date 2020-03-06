@@ -2,7 +2,7 @@
 Protected Class Compressor
 Inherits LZMAEngine
 	#tag Method, Flags = &h0
-		Function Compress(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncoderActions, ReadCount As Int64 = -1) As Boolean
+		Function Compress(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64 = - 1) As Boolean
 		  Return Super.Perform(ReadFrom, WriteTo, Action, ReadCount)
 		End Function
 	#tag EndMethod

@@ -29,7 +29,7 @@ Private Class LZMAEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncoderActions, ReadCount As Int64) As Boolean
+		Protected Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
 		  If Not IsOpen Then
 		    Return False
 		  End If
@@ -59,7 +59,7 @@ Private Class LZMAEngine
 		    
 		  Loop Until (ReadCount > -1 And count >= ReadCount) Or ReadFrom = Nil Or ReadFrom.EOF
 		  
-		  If Action = EncoderActions.Finish And mLastError <> ErrorCodes.StreamEnd Then Raise New LZMAException(mLastError)
+		  If Action = EncodeAction.Finish And mLastError <> ErrorCodes.StreamEnd Then Raise New LZMAException(mLastError)
 		  Return mStream.AvailIn = 0 And (mLastError = ErrorCodes.OK Or mLastError = ErrorCodes.StreamEnd)
 		End Function
 	#tag EndMethod

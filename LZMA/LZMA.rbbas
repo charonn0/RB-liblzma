@@ -60,7 +60,7 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_code Lib "liblzma" (ByRef Stream As lzma_stream, Action As EncoderActions) As ErrorCodes
+		Private Soft Declare Function lzma_code Lib "liblzma" (ByRef Stream As lzma_stream, Action As EncodeAction) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -135,7 +135,7 @@ Protected Module LZMA
 		SHA256=10
 	#tag EndEnum
 
-	#tag Enum, Name = EncoderActions, Type = Integer, Flags = &h1
+	#tag Enum, Name = EncodeAction, Flags = &h1
 		Run=0
 		  SyncFlush=1
 		  FullFlush=2
