@@ -3,7 +3,7 @@ Private Class LZMAEngine
 	#tag Method, Flags = &h1
 		Protected Sub Constructor()
 		  If Not LZMA.IsAvailable() Then Raise New PlatformNotSupportedException
-		  mStream.Allocator = Nil
+		  mStream.InternalState = 0
 		  mStream.AvailIn = 0
 		  mStream.AvailOut = 0
 		  mStream.NextIn = Nil
@@ -23,8 +23,8 @@ Private Class LZMAEngine
 
 	#tag Method, Flags = &h21
 		Private Sub Destructor()
-		  If mStream.Allocator <> Nil Then mLastError = lzma_end(mStream)
-		  mStream.Allocator = Nil
+		  If mStream.InternalState <> 0 Then mLastError = lzma_end(mStream)
+		  mStream.InternalState = 0
 		End Sub
 	#tag EndMethod
 
