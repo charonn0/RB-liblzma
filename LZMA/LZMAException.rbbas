@@ -4,6 +4,40 @@ Inherits RuntimeException
 	#tag Method, Flags = &h1000
 		Sub Constructor(Error As ErrorCodes)
 		  Me.ErrorNumber = Integer(Error)
+		  Select Case Error
+		  Case ErrorCodes.StreamEnd
+		    Me.Message = "End of stream was reached"
+		    
+		  Case ErrorCodes.NoCheck
+		    Me.Message = "Input stream has no integrity check"
+		    
+		  Case ErrorCodes.UnsupportedCheck
+		    Me.Message = "Cannot calculate the integrity check"
+		    
+		  Case ErrorCodes.GetCheck
+		    Me.Message = "Integrity check type is now available"
+		    
+		  Case ErrorCodes.MemError
+		    Me.Message = "Cannot allocate memory"
+		    
+		  Case ErrorCodes.MemLimitError
+		    Me.Message = "Memory usage limit was reached"
+		    
+		  Case ErrorCodes.FormatError
+		    Me.Message = "File format not recognized"
+		    
+		  Case ErrorCodes.OptionsError
+		    Me.Message = "Invalid or unsupported options"
+		    
+		  Case ErrorCodes.DataError
+		    Me.Message = "Data is corrupt"
+		    
+		  Case ErrorCodes.BuffError
+		    Me.Message = "No progress is possible"
+		    
+		  Case ErrorCodes.ProgError
+		    Me.Message = "Programming error"
+		  End Select
 		End Sub
 	#tag EndMethod
 
