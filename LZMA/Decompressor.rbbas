@@ -2,11 +2,10 @@
 Protected Class Decompressor
 Inherits LZMAEngine
 	#tag Method, Flags = &h0
-		Sub Constructor(MemoryLimit As UInt64 = 0, Flags As UInt32 = 0)
+		Sub Constructor(MemoryLimit As UInt64 = 0, Flags As UInt32 = LZMA.LZMA_CONCATENATED)
 		  Super.Constructor()
 		  Const UINT64_MAX = &hffffffffffffffff
 		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
-		  If Flags = 0 Then Flags = LZMA_CONCATENATED
 		  mLastError = lzma_auto_decoder(mStream, MemoryLimit, Flags)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		End Sub
