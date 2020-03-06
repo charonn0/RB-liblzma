@@ -68,10 +68,28 @@ Private Class LZMAEngine
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  return mStream.AvailIn
+			End Get
+		#tag EndGetter
+		AvailIn As UInt32
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
 			  Return mStream.InternalState <> 0
 			End Get
 		#tag EndGetter
 		IsOpen As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mLastError
+			End Get
+		#tag EndGetter
+		LastError As ErrorCodes
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h1
@@ -81,6 +99,24 @@ Private Class LZMAEngine
 	#tag Property, Flags = &h1
 		Protected mStream As lzma_stream
 	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mStream.TotalIn
+			End Get
+		#tag EndGetter
+		TotalIn As UInt64
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mStream.TotalOut
+			End Get
+		#tag EndGetter
+		TotalOut As UInt64
+	#tag EndComputedProperty
 
 
 	#tag ViewBehavior
