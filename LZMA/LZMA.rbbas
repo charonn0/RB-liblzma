@@ -1,6 +1,46 @@
 #tag Module
 Protected Module LZMA
 	#tag Method, Flags = &h1
+		Protected Function CRC32(Data As MemoryBlock, LastCRC As UInt32 = 0, DataSize As Integer = - 1) As UInt32
+		  ' Calculate the CRC32 checksum for the Data. Pass back the returned value
+		  ' to continue processing.
+		  '    Dim crc As UInt32
+		  '    Do
+		  '      crc = CRC32(NextData, crc)
+		  '    Loop
+		  ' If Data.Size is not known (-1) then specify the size as DataSize
+		  
+		  Static avail As Boolean
+		  If Not avail Then avail = IsAvailable()
+		  If Not avail Or Data = Nil Then Return 0
+		  
+		  If DataSize = -1 Then DataSize = Data.Size
+		  Return lzma_crc32(Data, DataSize, LastCRC)
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function CRC64(Data As MemoryBlock, LastCRC As UInt64 = 0, DataSize As Integer = - 1) As UInt64
+		  ' Calculate the CRC64 checksum for the Data. Pass back the returned value
+		  ' to continue processing.
+		  '    Dim crc As UInt64
+		  '    Do
+		  '      crc = CRC64(NextData, crc)
+		  '    Loop
+		  ' If Data.Size is not known (-1) then specify the size as DataSize
+		  
+		  Static avail As Boolean
+		  If Not avail Then avail = IsAvailable()
+		  If Not avail Or Data = Nil Then Return 0
+		  
+		  If DataSize = -1 Then DataSize = Data.Size
+		  Return lzma_crc64(Data, DataSize, LastCRC)
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function IsAvailable() As Boolean
 		  Static avail As Boolean
 		  If Not avail Then avail = System.IsFunctionAvailable("lzma_easy_encoder", "liblzma")
@@ -8,8 +48,27 @@ Protected Module LZMA
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function IsChecksumTypeAvailable(Type As LZMA.ChecksumType) As Boolean
+		  If Not IsAvailable Then Return False
+		  Return lzma_check_is_supported(Type)
+		End Function
+	#tag EndMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_check_is_supported Lib "liblzma" (CheckType As ChecksumType) As Boolean
+	#tag EndExternalMethod
+
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_code Lib "liblzma" (ByRef Stream As lzma_stream, Action As EncoderActions) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_crc32 Lib "liblzma" (Buffer As Ptr, BufferSize As UInt32, LastCRC As UInt32) As UInt32
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_crc64 Lib "liblzma" (Buffer As Ptr, BufferSize As UInt32, LastCRC As UInt64) As UInt64
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
