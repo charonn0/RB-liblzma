@@ -4,6 +4,7 @@ MinIDEVersion=20070100
 Class=App;App.rbbas;&h420667FF;&h0;false
 BuildSteps=Build Automation;Build Automation.rbbas;&h530617FF;&h0;false
 Module=LZMA;LZMA/LZMA.rbbas;&h4A67EFFF;&h0;false
+Class=LZMAStream;LZMA/LZMAStream.rbbas;&h50C6BFFF;&h4A67EFFF;false
 Class=LZMAException;LZMA/LZMAException.rbbas;&h502E97FF;&h4A67EFFF;false
 Class=Compressor;LZMA/Compressor.rbbas;&h23F8B7FF;&h4A67EFFF;false
 Class=LZMAEngine;LZMA/LZMAEngine.rbbas;&h2ADFB7FF;&h4A67EFFF;false
