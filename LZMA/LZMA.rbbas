@@ -84,6 +84,18 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_filters_update Lib "liblzma" (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_filter_decoder_is_supported Lib "liblzma" (FilterID As UInt64) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_filter_encoder_is_supported Lib "liblzma" (FilterID As UInt64) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_memlimit_get Lib "liblzma" (ByRef Stream As lzma_stream) As UInt64
 	#tag EndExternalMethod
 
@@ -94,6 +106,35 @@ Protected Module LZMA
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_memusage Lib "liblzma" (ByRef Stream As lzma_stream) As UInt64
 	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_raw_decoder Lib "liblzma" (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_raw_encoder Lib "liblzma" (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_version_number Lib "liblzma" () As UInt32
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_version_string Lib "liblzma" () As CString
+	#tag EndExternalMethod
+
+	#tag Method, Flags = &h1
+		Protected Function VersionNumber() As UInt32
+		  If IsAvailable Then Return lzma_version_number()
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function VersionString() As String
+		  If IsAvailable Then Return lzma_version_string()
+		End Function
+	#tag EndMethod
+
 
 	#tag Constant, Name = CHUNK_SIZE, Type = Double, Dynamic = False, Default = \"16384", Scope = Private
 	#tag EndConstant
@@ -116,6 +157,11 @@ Protected Module LZMA
 	#tag Constant, Name = LZMA_TELL_UNSUPPORTED_CHECK, Type = Double, Dynamic = False, Default = \"&h02", Scope = Private
 	#tag EndConstant
 
+
+	#tag Structure, Name = lzma_filter, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
+		ID As UInt64
+		Options As Ptr
+	#tag EndStructure
 
 	#tag Structure, Name = lzma_stream, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
 		NextIn As Ptr
