@@ -30,9 +30,7 @@ Private Class LZMAEngine
 
 	#tag Method, Flags = &h1
 		Protected Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
-		  If Not IsOpen Then
-		    Return False
-		  End If
+		  If Not IsOpen Then Return False
 		  Dim outbuff As New MemoryBlock(CHUNK_SIZE)
 		  Dim count As Integer
 		  Do
