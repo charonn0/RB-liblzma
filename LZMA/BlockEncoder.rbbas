@@ -1,23 +1,35 @@
 #tag Class
-Protected Class Decompressor
-Inherits LZMAEngine
+Protected Class BlockEncoder
+Inherits LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor(MemoryLimit As UInt64 = 0, Flags As UInt32 = LZMA.LZMA_CONCATENATED)
+		Sub Constructor(ChecksumType As LZMA.ChecksumType)
 		  Super.Constructor()
-		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
-		  mLastError = lzma_auto_decoder(mStream, MemoryLimit, Flags)
+		  mBlock.Version = 1
+		  mBlock.Check = ChecksumType
+		  mLastError = lzma_block_encoder(mStream, mBlock)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Decompress(ReadFrom As Readable, WriteTo As Writeable, ReadCount As Int64 = -1) As Boolean
-		  Return Super.Perform(ReadFrom, WriteTo, EncodeAction.Run, ReadCount)
+		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
+		  Return Super.Perform(ReadFrom, WriteTo, Action, ReadCount)
 		End Function
 	#tag EndMethod
 
 
+	#tag Property, Flags = &h1
+		Protected mBlock As lzma_block
+	#tag EndProperty
+
+
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="Extreme"
+			Group="Behavior"
+			Type="Boolean"
+			InheritedFrom="LZMA.Compressor"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
@@ -31,6 +43,12 @@ Inherits LZMAEngine
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Level"
+			Group="Behavior"
+			Type="Integer"
+			InheritedFrom="LZMA.Compressor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
