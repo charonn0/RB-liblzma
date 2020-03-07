@@ -1,5 +1,11 @@
 #tag Module
 Protected Module LZMA
+	#tag Method, Flags = &h21
+		Private Function ConvertFilterList(Filters() As LZMA.lzma_filter) As MemoryBlock
+		  
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function CRC32(Data As MemoryBlock, LastCRC As UInt32 = 0, DataSize As Integer = - 1) As UInt32
 		  ' Calculate the CRC32 checksum for the Data. Pass back the returned value
@@ -128,6 +134,10 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_stream_encoder Lib "liblzma" (ByRef Stream As lzma_stream, Filters As Ptr, Check As ChecksumType) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_version_number Lib "liblzma" () As UInt32
 	#tag EndExternalMethod
 
@@ -197,7 +207,7 @@ Protected Module LZMA
 	#tag EndConstant
 
 
-	#tag Structure, Name = lzma_filter, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
+	#tag Structure, Name = lzma_filter, Flags = &h1, Attributes = \"StructureAlignment \x3D 8"
 		ID As UInt64
 		Options As Ptr
 	#tag EndStructure
