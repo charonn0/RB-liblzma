@@ -92,6 +92,29 @@ Private Class LZMAEngine
 		LastError As ErrorCodes
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  If IsOpen Then Return lzma_memlimit_get(mStream)
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  If IsOpen Then mLastError = lzma_memlimit_set(mStream, value)
+			End Set
+		#tag EndSetter
+		MemoryLimit As UInt64
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  If IsOpen Then Return lzma_memusage(mStream)
+			End Get
+		#tag EndGetter
+		MemoryUse As UInt64
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h1
 		Protected mLastError As ErrorCodes
 	#tag EndProperty

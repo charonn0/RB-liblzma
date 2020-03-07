@@ -83,6 +83,17 @@ Protected Module LZMA
 		Private Soft Declare Function lzma_end Lib "liblzma" (ByRef Stream As lzma_stream) As ErrorCodes
 	#tag EndExternalMethod
 
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_memlimit_get Lib "liblzma" (ByRef Stream As lzma_stream) As UInt64
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_memlimit_set Lib "liblzma" (ByRef Stream As lzma_stream, MemLimit As UInt64) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_memusage Lib "liblzma" (ByRef Stream As lzma_stream) As UInt64
+	#tag EndExternalMethod
 
 	#tag Constant, Name = CHUNK_SIZE, Type = Double, Dynamic = False, Default = \"16384", Scope = Private
 	#tag EndConstant
