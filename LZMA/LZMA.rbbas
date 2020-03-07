@@ -56,6 +56,14 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_alone_decoder Lib "liblzma" (ByRef Stream As lzma_stream, MemLimit As UInt64) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_alone_encoder Lib "liblzma" (ByRef Stream As lzma_stream, Options As lzma_options_lzma) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_auto_decoder Lib "liblzma" (ByRef Stream As lzma_stream, MemLimit As UInt64, Flags As UInt32) As ErrorCodes
 	#tag EndExternalMethod
 
@@ -93,6 +101,10 @@ Protected Module LZMA
 
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_filter_encoder_is_supported Lib "liblzma" (FilterID As UInt64) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_lzma_preset Lib "liblzma" (ByRef Options As lzma_options_lzma, Preset As UInt32) As UInt32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -142,7 +154,28 @@ Protected Module LZMA
 	#tag Constant, Name = LZMA_CONCATENATED, Type = Double, Dynamic = False, Default = \"&h08", Scope = Private
 	#tag EndConstant
 
+	#tag Constant, Name = LZMA_DICT_SIZE_DEFAULT, Type = Double, Dynamic = False, Default = \"&h00800000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_DICT_SIZE_MIN, Type = Double, Dynamic = False, Default = \"4096", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_FILTER_LZMA1, Type = Double, Dynamic = False, Default = \"&h4000000000000001", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_FILTER_LZMA2, Type = Double, Dynamic = False, Default = \"&h21", Scope = Private
+	#tag EndConstant
+
 	#tag Constant, Name = LZMA_IGNORE_CHECK, Type = Double, Dynamic = False, Default = \"&h10", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_LCLP_MAX, Type = Double, Dynamic = False, Default = \"4", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_LCLP_MIN, Type = Double, Dynamic = False, Default = \"0", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_LC_DEFAULT, Type = Double, Dynamic = False, Default = \"3", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = LZMA_PRESET_EXTREME, Type = Double, Dynamic = False, Default = \"&h80000000", Scope = Private
@@ -157,10 +190,43 @@ Protected Module LZMA
 	#tag Constant, Name = LZMA_TELL_UNSUPPORTED_CHECK, Type = Double, Dynamic = False, Default = \"&h02", Scope = Private
 	#tag EndConstant
 
+	#tag Constant, Name = LZMA_VLI_UNKNOWN, Type = Double, Dynamic = False, Default = \"UINT64_MAX", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = UINT64_MAX, Type = Double, Dynamic = False, Default = \"&hFFFFFFFFFFFFFFFF", Scope = Private
+	#tag EndConstant
+
 
 	#tag Structure, Name = lzma_filter, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
 		ID As UInt64
 		Options As Ptr
+	#tag EndStructure
+
+	#tag Structure, Name = lzma_options_lzma, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
+		DictionarySize As UInt32
+		  PresetDictionary As Ptr
+		  PresetDictionarySize As UInt32
+		  LiteralContextBitCount As UInt32
+		  LiteralPositionBitCount As UInt32
+		  PositionBitCount As UInt32
+		  Mode As LZMAMode
+		  NiceLength As UInt32
+		  MatchFinder As LZMAMatchFinder
+		  Depth As UInt32
+		  Reserved1 As UInt32
+		  Reserved2 As UInt32
+		  Reserved3 As UInt32
+		  Reserved4 As UInt32
+		  Reserved5 As UInt32
+		  Reserved6 As UInt32
+		  Reserved7 As UInt32
+		  Reserved8 As UInt32
+		  Reserved9 As UInt32
+		  Reserved10 As UInt32
+		  Reserved11 As UInt32
+		  Reserved12 As UInt32
+		  Reserved13 As Ptr
+		Reserved14 As Ptr
 	#tag EndStructure
 
 	#tag Structure, Name = lzma_stream, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
@@ -213,6 +279,19 @@ Protected Module LZMA
 		  DataError=9
 		  BuffError=10
 		ProgError=11
+	#tag EndEnum
+
+	#tag Enum, Name = LZMAMatchFinder, Type = Integer, Flags = &h1
+		MF_HC3 = &h03
+		  MF_HC4=&h04
+		  MF_BT2=&h12
+		  MF_BT3=&h13
+		MF_BT4=&h14
+	#tag EndEnum
+
+	#tag Enum, Name = LZMAMode, Type = Integer, Flags = &h1
+		Fast=1
+		Normal=2
 	#tag EndEnum
 
 
