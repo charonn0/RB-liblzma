@@ -9,6 +9,7 @@ Class=LZMAException;LZMA/LZMAException.rbbas;&h502E97FF;&h4A67EFFF;false
 Class=Compressor;LZMA/Compressor.rbbas;&h23F8B7FF;&h4A67EFFF;false
 Class=LZMAEngine;LZMA/LZMAEngine.rbbas;&h2ADFB7FF;&h4A67EFFF;false
 Class=Decompressor;LZMA/Decompressor.rbbas;&h30A4E7FF;&h4A67EFFF;false
+Module=Testing;Testing.rbbas;&h4C17AFFF;&h0;false
 MajorVersion=1
 MinorVersion=0
 SubVersion=0
