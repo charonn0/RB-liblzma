@@ -28,11 +28,9 @@ Private Class LZMAEngine
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
-		  If Not IsOpen Then
-		    Return False
-		  End If
+	#tag Method, Flags = &h0
+		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
+		  If Not IsOpen Then Return False
 		  Dim outbuff As New MemoryBlock(CHUNK_SIZE)
 		  Dim count As Integer
 		  Do
@@ -90,6 +88,29 @@ Private Class LZMAEngine
 			End Get
 		#tag EndGetter
 		LastError As ErrorCodes
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  If IsOpen Then Return lzma_memlimit_get(mStream)
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  If IsOpen Then mLastError = lzma_memlimit_set(mStream, value)
+			End Set
+		#tag EndSetter
+		MemoryLimit As UInt64
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  If IsOpen Then Return lzma_memusage(mStream)
+			End Get
+		#tag EndGetter
+		MemoryUse As UInt64
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h1

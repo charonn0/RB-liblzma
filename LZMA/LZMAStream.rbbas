@@ -133,7 +133,7 @@ Implements Readable,Writeable
 		  If mCompressor = Nil Then Raise New IOException
 		  Select Case Flushing
 		  Case EncodeAction.Finish, EncodeAction.FullFlush, EncodeAction.SyncFlush
-		    If Not mCompressor.Compress(Nil, mDestination, Flushing) Then Raise New LZMAException(mCompressor.LastError)
+		    If Not mCompressor.Perform(Nil, mDestination, Flushing, -1) Then Raise New LZMAException(mCompressor.LastError)
 		  Else
 		    Raise New LZMAException(ErrorCodes.ProgError)
 		  End Select
@@ -208,7 +208,7 @@ Implements Readable,Writeable
 		    End If
 		  End If
 		  If readsz > 0 Then
-		    If Not mDecompressor.Decompress(mSource, ret, readsz) Then Raise New LZMAException(mDecompressor.LastError)
+		    If Not mDecompressor.Perform(mSource, ret, EncodeAction.Run, readsz) Then Raise New LZMAException(mDecompressor.LastError)
 		    ret.Close
 		    If BufferedReading Then
 		      If data.Size >= Count Then
@@ -244,7 +244,7 @@ Implements Readable,Writeable
 		  
 		  If mCompressor = Nil Then Raise New IOException
 		  Dim tmp As New BinaryStream(Data)
-		  If Not mCompressor.Compress(tmp, mDestination, EncodeAction.Run) Then Raise New LZMAException(mCompressor.LastError)
+		  If Not mCompressor.Perform(tmp, mDestination, EncodeAction.Run, -1) Then Raise New LZMAException(mCompressor.LastError)
 		End Sub
 	#tag EndMethod
 

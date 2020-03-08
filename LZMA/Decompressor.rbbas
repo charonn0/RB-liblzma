@@ -10,12 +10,6 @@ Inherits LZMAEngine
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function Decompress(ReadFrom As Readable, WriteTo As Writeable, ReadCount As Int64 = -1) As Boolean
-		  Return Super.Perform(ReadFrom, WriteTo, EncodeAction.Run, ReadCount)
-		End Function
-	#tag EndMethod
-
 
 	#tag ViewBehavior
 		#tag ViewProperty
