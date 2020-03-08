@@ -74,6 +74,14 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_decoder Lib "liblzma" (ByRef Stream As lzma_stream, ByRef Block As lzma_block) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_encoder Lib "liblzma" (ByRef Stream As lzma_stream, ByRef Block As lzma_block) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_check_is_supported Lib "liblzma" (CheckType As ChecksumType) As Boolean
 	#tag EndExternalMethod
 
@@ -161,6 +169,12 @@ Protected Module LZMA
 	#tag Constant, Name = CHUNK_SIZE, Type = Double, Dynamic = False, Default = \"16384", Scope = Private
 	#tag EndConstant
 
+	#tag Constant, Name = LZMA_BLOCK_HEADER_SIZE_MAX, Type = Double, Dynamic = False, Default = \"1024", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_BLOCK_HEADER_SIZE_MIN, Type = Double, Dynamic = False, Default = \"8", Scope = Private
+	#tag EndConstant
+
 	#tag Constant, Name = LZMA_CONCATENATED, Type = Double, Dynamic = False, Default = \"&h08", Scope = Private
 	#tag EndConstant
 
@@ -206,6 +220,31 @@ Protected Module LZMA
 	#tag Constant, Name = UINT64_MAX, Type = Double, Dynamic = False, Default = \"&hFFFFFFFFFFFFFFFF", Scope = Private
 	#tag EndConstant
 
+
+	#tag Structure, Name = lzma_block, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
+		Version As UInt32
+		  HeaderSize As UInt32
+		  Check As ChecksumType
+		  CompressedSize As UInt64
+		  UncompressedSize As UInt64
+		  Filters As lzma_filter
+		  Checksum As String*64
+		  Reserved1 As Ptr
+		  Reserved2 As Ptr
+		  Reserved3 As Ptr
+		  Reserved4 As UInt32
+		  Reserved5 As UInt32
+		  Reserved6 As UInt64
+		  Reserved7 As UInt64
+		  Reserved8 As UInt64
+		  Reserved9 As UInt64
+		  Reserved10 As UInt64
+		  Reserved11 As UInt64
+		  Reserved12 As UInt32
+		  Reserved13 As UInt32
+		  Reserved14 As UInt32
+		Reserved15 As UInt32
+	#tag EndStructure
 
 	#tag Structure, Name = lzma_filter, Flags = &h1, Attributes = \"StructureAlignment \x3D 8"
 		ID As UInt64
