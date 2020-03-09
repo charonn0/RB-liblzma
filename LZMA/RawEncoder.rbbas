@@ -1,8 +1,8 @@
 #tag Class
 Protected Class RawEncoder
-Inherits LZMAEngine
+Inherits LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor()
+		Sub Constructor(Level As UInt32)
 		  Super.Constructor()
 		  Dim filters As New MemoryBlock(1024)
 		  Dim p As Ptr = filters

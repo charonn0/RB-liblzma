@@ -1,6 +1,6 @@
 #tag Class
 Protected Class BlockDecoder
-Inherits LZMA.Compressor
+Inherits LZMA.Decompressor
 	#tag Method, Flags = &h0
 		Sub Constructor(ChecksumType As LZMA.ChecksumType, CompressedSize As UInt64)
 		  Super.Constructor()

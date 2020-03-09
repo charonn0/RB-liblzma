@@ -13,16 +13,6 @@ Inherits LZMAEngine
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Constructor(Filters() As LZMA.lzma_filter, Checksum As LZMA.ChecksumType)
-		  ' compress using custom filters
-		  Super.Constructor()
-		  Dim f As MemoryBlock = ConvertFilterList(Filters)
-		  mLastError = lzma_stream_encoder(mStream, f, Checksum)
-		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
-		End Sub
-	#tag EndMethod
-
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
@@ -47,7 +37,7 @@ Inherits LZMAEngine
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mLevel As Integer
+		Private mLevel As Integer = 6
 	#tag EndProperty
 
 

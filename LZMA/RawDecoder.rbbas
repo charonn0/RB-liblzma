@@ -1,6 +1,6 @@
 #tag Class
 Protected Class RawDecoder
-Inherits LZMAEngine
+Inherits LZMA.Decompressor
 	#tag Method, Flags = &h0
 		Sub Constructor()
 		  Super.Constructor()

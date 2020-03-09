@@ -1,6 +1,6 @@
 #tag Class
 Protected Class LZMADecoder
-Inherits LZMAEngine
+Inherits LZMA.Decompressor
 	#tag Method, Flags = &h0
 		Sub Constructor(MemoryLimit As UInt64 = 0)
 		  Super.Constructor()

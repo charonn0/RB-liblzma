@@ -118,7 +118,7 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_lzma_preset Lib "liblzma" (ByRef Options As lzma_options_lzma, Preset As UInt32) As UInt32
+		Private Soft Declare Function lzma_lzma_preset Lib "liblzma" (ByRef Options As lzma_options_lzma, Preset As UInt32) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -139,6 +139,10 @@ Protected Module LZMA
 
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_raw_encoder Lib "liblzma" (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_stream_decoder Lib "liblzma" (ByRef Stream As lzma_stream, MemoryLimit As UInt64, Flags As UInt32) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21

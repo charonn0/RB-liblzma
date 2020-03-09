@@ -24,22 +24,7 @@ Implements Readable,Writeable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(Source As BinaryStream, CompressionLevel As Integer = -1, Optional Checksum As LZMA.ChecksumType)
-		  ' Constructs a LZMAStream from the Source BinaryStream. If the Source's current position is equal
-		  ' to its length then compressed output will be appended, otherwise the Source will be used as
-		  ' input to be decompressed.
-		  
-		  If Source.Length = Source.Position Then 'compress into Source
-		    If Checksum = ChecksumType.None Then Checksum = ChecksumType.CRC32
-		    Me.Constructor(New Compressor(CompressionLevel, Checksum), Source)
-		  Else ' decompress from Source
-		    Me.Constructor(New Decompressor(), Source)
-		  End If
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Sub Constructor(Engine As LZMA.Compressor, Destination As Writeable)
+		Sub Constructor(Engine As LZMA.Compressor, Destination As Writeable)
 		  ' Construct a compression stream using the Engine and Destination parameters
 		  mCompressor = Engine
 		  mDestination = Destination
@@ -47,47 +32,13 @@ Implements Readable,Writeable
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Sub Constructor(Engine As LZMA.Decompressor, Source As Readable)
+	#tag Method, Flags = &h0
+		Sub Constructor(Engine As LZMA.Decompressor, Source As Readable)
 		  ' Construct a decompression stream using the Engine and Source parameters
 		  mDecompressor = Engine
 		  mSource = Source
 		  
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Constructor(Source As MemoryBlock, CompressionLevel As Integer = -1, Optional Checksum As LZMA.ChecksumType)
-		  ' Constructs a LZMAStream from the Source MemoryBlock. If the Source's size is zero then
-		  ' compressed output will be appended, otherwise the Source will be used as input
-		  ' to be decompressed.
-		  
-		  If Source.Size >= 0 Then
-		    If Checksum = ChecksumType.None Then Checksum = ChecksumType.CRC32
-		    Me.Constructor(New BinaryStream(Source), CompressionLevel, Checksum)
-		  Else
-		    Raise New LZMAException(ErrorCodes.ProgError) ' can't use memoryblocks of unknown size!!
-		  End If
-		  mSourceMB = Source
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		 Shared Function Create(OutputStream As FolderItem, CompressionLevel As Integer = -1, Overwrite As Boolean = False, Optional Checksum As LZMA.ChecksumType, Extreme As Boolean = False) As LZMA.LZMAStream
-		  ' Create a compression stream where compressed output is written to the OutputStream file.
-		  
-		  Return Create(BinaryStream.Create(OutputStream, Overwrite), CompressionLevel, Checksum, Extreme)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		 Shared Function Create(OutputStream As Writeable, CompressionLevel As Integer = -1, Optional Checksum As LZMA.ChecksumType, Extreme As Boolean = False) As LZMA.LZMAStream
-		  ' Create a compression stream where compressed output is written to the OutputStream object.
-		  
-		  Return New LZMAStream(New Compressor(CompressionLevel, Checksum, Extreme), OutputStream)
-		  
-		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
@@ -153,23 +104,6 @@ Implements Readable,Writeable
 		    mBufferedReading = True
 		  End If
 		  Return DefineEncoding(mReadBuffer, encoding)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		 Shared Function Open(InputStream As FolderItem, Flags As UInt32, MemoryLimit As UInt64 = 0) As LZMA.LZMAStream
-		  ' Create a decompression stream where the compressed input is read from the Source file.
-		  
-		  Return Open(BinaryStream.Open(InputStream), Flags, MemoryLimit)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		 Shared Function Open(InputStream As Readable, Flags As UInt32 = 0, MemoryLimit As UInt64 = 0) As LZMA.LZMAStream
-		  ' Create a decompression stream where the compressed input is read from the InputStream object.
-		  
-		  Return New LZMAStream(New Decompressor(MemoryLimit, Flags), InputStream)
-		  
 		End Function
 	#tag EndMethod
 
