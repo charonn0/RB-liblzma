@@ -256,15 +256,6 @@ Implements Readable,Writeable
 		LastError As LZMA.ErrorCodes
 	#tag EndComputedProperty
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  If mCompressor <> Nil Then Return mCompressor.Level
-			End Get
-		#tag EndGetter
-		Level As Integer
-	#tag EndComputedProperty
-
 	#tag Property, Flags = &h21
 		Private mBufferedReading As Boolean = True
 	#tag EndProperty
@@ -328,11 +319,6 @@ Implements Readable,Writeable
 			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Encoding"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
@@ -366,16 +352,6 @@ Implements Readable,Writeable
 			Visible=true
 			Group="ID"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Ratio"
-			Group="Behavior"
-			Type="Single"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Strategy"
-			Group="Behavior"
-			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

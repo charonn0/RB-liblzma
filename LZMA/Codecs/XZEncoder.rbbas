@@ -1,37 +1,25 @@
-#tag Interface
-Protected Interface Decompressor
+#tag Class
+Protected Class XZEncoder
+Inherits LZMA.Codecs.LZMAEngine
+Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Function AvailIn() As UInt32
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function LastError() As LZMA.ErrorCodes
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function TotalIn() As UInt64
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function TotalOut() As UInt64
-		  
-		End Function
+		Sub Constructor(Filters() As LZMA.lzma_filter, Checksum As LZMA.ChecksumType)
+		  ' compress using custom filters
+		  Super.Constructor()
+		  Dim f As MemoryBlock = ConvertFilterList(Filters)
+		  mLastError = lzma_stream_encoder(mStream, f, Checksum)
+		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		End Sub
 	#tag EndMethod
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="Extreme"
+			Group="Behavior"
+			Type="Boolean"
+			InheritedFrom="LZMA.Compressor"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
@@ -45,6 +33,12 @@ Protected Interface Decompressor
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Level"
+			Group="Behavior"
+			Type="Integer"
+			InheritedFrom="LZMA.Compressor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -66,5 +60,5 @@ Protected Interface Decompressor
 			InheritedFrom="Object"
 		#tag EndViewProperty
 	#tag EndViewBehavior
-End Interface
-#tag EndInterface
+End Class
+#tag EndClass

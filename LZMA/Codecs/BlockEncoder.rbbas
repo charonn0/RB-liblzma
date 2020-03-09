@@ -1,22 +1,15 @@
 #tag Class
-Protected Class BlockDecoder
-Inherits LZMA.Decompressor
+Protected Class BlockEncoder
+Inherits LZMA.Codecs.LZMAEngine
+Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor(ChecksumType As LZMA.ChecksumType, CompressedSize As UInt64)
+		Sub Constructor(ChecksumType As LZMA.ChecksumType)
 		  Super.Constructor()
 		  mBlock.Version = 1
-		  mBlock.HeaderSize = LZMA_BLOCK_HEADER_SIZE_MIN
 		  mBlock.Check = ChecksumType
-		  mBlock.CompressedSize = CompressedSize
-		  mLastError = lzma_block_decoder(mStream, mBlock)
+		  mLastError = lzma_block_encoder(mStream, mBlock)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
-		  Return Super.Perform(ReadFrom, WriteTo, Action, ReadCount)
-		End Function
 	#tag EndMethod
 
 

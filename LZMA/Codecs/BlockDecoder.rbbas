@@ -1,38 +1,26 @@
 #tag Class
-Protected Class LZMAEncoder
-Inherits LZMA.Compressor
+Protected Class BlockDecoder
+Inherits LZMA.Codecs.LZMAEngine
+Implements LZMA.Decompressor
 	#tag Method, Flags = &h0
-		Sub Constructor()
+		Sub Constructor(ChecksumType As LZMA.ChecksumType, CompressedSize As UInt64)
 		  Super.Constructor()
-		  mOptions.Depth = 0
-		  mOptions.DictionarySize = 0
-		  mOptions.LiteralContextBitCount = 0
-		  mOptions.LiteralPositionBitCount = 0
-		  mOptions.MatchFinder = LZMAMatchFinder.MF_HC3
-		  mOptions.Mode = LZMAMode.Normal
-		  mOptions.NiceLength = 0
-		  mOptions.PositionBitCount = 0
-		  mOptions.PresetDictionary = Nil
-		  mOptions.PresetDictionarySize = 0
-		  
-		  mLastError = lzma_alone_encoder(mStream, mOptions)
+		  mBlock.Version = 1
+		  mBlock.HeaderSize = LZMA_BLOCK_HEADER_SIZE_MIN
+		  mBlock.Check = ChecksumType
+		  mBlock.CompressedSize = CompressedSize
+		  mLastError = lzma_block_decoder(mStream, mBlock)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
-		  
 		End Sub
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h21
-		Private mOptions As lzma_options_lzma
+	#tag Property, Flags = &h1
+		Protected mBlock As lzma_block
 	#tag EndProperty
 
 
 	#tag ViewBehavior
-		#tag ViewProperty
-			Name="Extreme"
-			Group="Behavior"
-			Type="Boolean"
-		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
@@ -46,11 +34,6 @@ Inherits LZMA.Compressor
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Level"
-			Group="Behavior"
-			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"

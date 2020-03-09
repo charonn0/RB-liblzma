@@ -47,6 +47,36 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function GetCompressor(Preset As UInt32 = 6, Codec As LZMA.Codec, Optional Filters() As LZMA.lzma_filter, Checksum As LZMA.ChecksumType) As LZMA.Compressor
+		  Select Case Codec
+		  Case LZMA.Codec.XZ
+		    Return New LZMA.Codecs.XZEncoder(Filters, Checksum)
+		  Case LZMA.Codec.lzma1
+		    Return New LZMA.Codecs.LZMAEncoder()
+		  Case LZMA.Codec.Raw
+		    Return New LZMA.Codecs.RawEncoder(Preset)
+		  Else
+		    Return New LZMA.Codecs.BasicEncoder(Preset, Checksum)
+		  End Select
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function GetDecompressor(Codec As LZMA.Codec, MemoryLimit As UInt64, Flags As UInt32) As LZMA.Decompressor
+		  Select Case Codec
+		  Case LZMA.Codec.XZ
+		    Return New LZMA.Codecs.XZDecoder(MemoryLimit, Flags)
+		  Case LZMA.Codec.lzma1
+		    Return New LZMA.Codecs.LZMADecoder(MemoryLimit)
+		  Case LZMA.Codec.Raw
+		    Return New LZMA.Codecs.RawDecoder()
+		  Else
+		    Return New LZMA.Codecs.BasicDecoder(MemoryLimit, Flags)
+		  End Select
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function IsAvailable() As Boolean
 		  Static avail As Boolean
 		  If Not avail Then avail = System.IsFunctionAvailable("lzma_easy_encoder", "liblzma")
@@ -206,7 +236,7 @@ Protected Module LZMA
 	#tag Constant, Name = LZMA_LC_DEFAULT, Type = Double, Dynamic = False, Default = \"3", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = LZMA_PRESET_EXTREME, Type = Double, Dynamic = False, Default = \"&h80000000", Scope = Private
+	#tag Constant, Name = LZMA_PRESET_EXTREME, Type = Double, Dynamic = False, Default = \"&h80000000", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = LZMA_TELL_ANY_CHECK, Type = Double, Dynamic = False, Default = \"&h04", Scope = Private
@@ -309,6 +339,14 @@ Protected Module LZMA
 		  CRC32=1
 		  CRC64=4
 		SHA256=10
+	#tag EndEnum
+
+	#tag Enum, Name = Codec, Type = Integer, Flags = &h1
+		XZ
+		  lzma1
+		  Raw
+		  Block
+		Detect
 	#tag EndEnum
 
 	#tag Enum, Name = EncodeAction, Flags = &h1

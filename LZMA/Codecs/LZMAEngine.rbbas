@@ -1,5 +1,11 @@
 #tag Class
-Private Class LZMAEngine
+Protected Class LZMAEngine
+	#tag Method, Flags = &h0
+		Function AvailIn() As UInt32
+		  return mStream.AvailIn
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Sub Constructor()
 		  If Not LZMA.IsAvailable() Then Raise New PlatformNotSupportedException
@@ -26,6 +32,12 @@ Private Class LZMAEngine
 		  If mStream.InternalState <> 0 Then mLastError = lzma_end(mStream)
 		  mStream.InternalState = 0
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LastError() As LZMA.ErrorCodes
+		  return mLastError
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -62,14 +74,26 @@ Private Class LZMAEngine
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function TotalIn() As UInt64
+		  return mStream.TotalIn
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function TotalOut() As UInt64
+		  return mStream.TotalOut
+		End Function
+	#tag EndMethod
+
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return mStream.AvailIn
+			  return mStream.AvailOut
 			End Get
 		#tag EndGetter
-		AvailIn As UInt32
+		AvailOut As UInt32
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -82,11 +106,6 @@ Private Class LZMAEngine
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mLastError
-			End Get
-		#tag EndGetter
 		LastError As ErrorCodes
 	#tag EndComputedProperty
 
@@ -120,24 +139,6 @@ Private Class LZMAEngine
 	#tag Property, Flags = &h1
 		Protected mStream As lzma_stream
 	#tag EndProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mStream.TotalIn
-			End Get
-		#tag EndGetter
-		TotalIn As UInt64
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mStream.TotalOut
-			End Get
-		#tag EndGetter
-		TotalOut As UInt64
-	#tag EndComputedProperty
 
 
 	#tag ViewBehavior
