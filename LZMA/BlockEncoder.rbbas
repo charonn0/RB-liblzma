@@ -11,12 +11,6 @@ Inherits LZMA.Compressor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
-		  Return Super.Perform(ReadFrom, WriteTo, Action, ReadCount)
-		End Function
-	#tag EndMethod
-
 
 	#tag Property, Flags = &h1
 		Protected mBlock As lzma_block
