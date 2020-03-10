@@ -92,99 +92,99 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_alone_decoder Lib "liblzma" (ByRef Stream As lzma_stream, MemLimit As UInt64) As ErrorCodes
+		Private Soft Declare Function lzma_alone_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, MemLimit As UInt64) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_alone_encoder Lib "liblzma" (ByRef Stream As lzma_stream, Options As lzma_options_lzma) As ErrorCodes
+		Private Soft Declare Function lzma_alone_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Options As lzma_options_lzma) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_auto_decoder Lib "liblzma" (ByRef Stream As lzma_stream, MemLimit As UInt64, Flags As UInt32) As ErrorCodes
+		Private Soft Declare Function lzma_auto_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, MemLimit As UInt64, Flags As UInt32) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_block_decoder Lib "liblzma" (ByRef Stream As lzma_stream, ByRef Block As lzma_block) As ErrorCodes
+		Private Soft Declare Function lzma_block_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, ByRef Block As lzma_block) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_block_encoder Lib "liblzma" (ByRef Stream As lzma_stream, ByRef Block As lzma_block) As ErrorCodes
+		Private Soft Declare Function lzma_block_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, ByRef Block As lzma_block) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_check_is_supported Lib "liblzma" (CheckType As ChecksumType) As Boolean
+		Private Soft Declare Function lzma_check_is_supported Lib LIB_LZMA (CheckType As ChecksumType) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_code Lib "liblzma" (ByRef Stream As lzma_stream, Action As EncodeAction) As ErrorCodes
+		Private Soft Declare Function lzma_code Lib LIB_LZMA (ByRef Stream As lzma_stream, Action As EncodeAction) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_crc32 Lib "liblzma" (Buffer As Ptr, BufferSize As UInt32, LastCRC As UInt32) As UInt32
+		Private Soft Declare Function lzma_crc32 Lib LIB_LZMA (Buffer As Ptr, BufferSize As UInt32, LastCRC As UInt32) As UInt32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_crc64 Lib "liblzma" (Buffer As Ptr, BufferSize As UInt32, LastCRC As UInt64) As UInt64
+		Private Soft Declare Function lzma_crc64 Lib LIB_LZMA (Buffer As Ptr, BufferSize As UInt32, LastCRC As UInt64) As UInt64
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_easy_encoder Lib "liblzma" (ByRef Stream As lzma_stream, Preset As UInt32, Check As ChecksumType) As ErrorCodes
+		Private Soft Declare Function lzma_easy_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Preset As UInt32, Check As ChecksumType) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_end Lib "liblzma" (ByRef Stream As lzma_stream) As ErrorCodes
+		Private Soft Declare Function lzma_end Lib LIB_LZMA (ByRef Stream As lzma_stream) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_filters_update Lib "liblzma" (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
+		Private Soft Declare Function lzma_filters_update Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_filter_decoder_is_supported Lib "liblzma" (FilterID As UInt64) As Boolean
+		Private Soft Declare Function lzma_filter_decoder_is_supported Lib LIB_LZMA (FilterID As UInt64) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_filter_encoder_is_supported Lib "liblzma" (FilterID As UInt64) As Boolean
+		Private Soft Declare Function lzma_filter_encoder_is_supported Lib LIB_LZMA (FilterID As UInt64) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_lzma_preset Lib "liblzma" (ByRef Options As lzma_options_lzma, Preset As UInt32) As Boolean
+		Private Soft Declare Function lzma_lzma_preset Lib LIB_LZMA (ByRef Options As lzma_options_lzma, Preset As UInt32) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_memlimit_get Lib "liblzma" (ByRef Stream As lzma_stream) As UInt64
+		Private Soft Declare Function lzma_memlimit_get Lib LIB_LZMA (ByRef Stream As lzma_stream) As UInt64
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_memlimit_set Lib "liblzma" (ByRef Stream As lzma_stream, MemLimit As UInt64) As ErrorCodes
+		Private Soft Declare Function lzma_memlimit_set Lib LIB_LZMA (ByRef Stream As lzma_stream, MemLimit As UInt64) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_memusage Lib "liblzma" (ByRef Stream As lzma_stream) As UInt64
+		Private Soft Declare Function lzma_memusage Lib LIB_LZMA (ByRef Stream As lzma_stream) As UInt64
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_raw_decoder Lib "liblzma" (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
+		Private Soft Declare Function lzma_raw_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_raw_encoder Lib "liblzma" (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
+		Private Soft Declare Function lzma_raw_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_stream_decoder Lib "liblzma" (ByRef Stream As lzma_stream, MemoryLimit As UInt64, Flags As UInt32) As ErrorCodes
+		Private Soft Declare Function lzma_stream_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, MemoryLimit As UInt64, Flags As UInt32) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_stream_encoder Lib "liblzma" (ByRef Stream As lzma_stream, Filters As Ptr, Check As ChecksumType) As ErrorCodes
+		Private Soft Declare Function lzma_stream_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr, Check As ChecksumType) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_version_number Lib "liblzma" () As UInt32
+		Private Soft Declare Function lzma_version_number Lib LIB_LZMA () As UInt32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_version_string Lib "liblzma" () As CString
+		Private Soft Declare Function lzma_version_string Lib LIB_LZMA () As CString
 	#tag EndExternalMethod
 
 	#tag Method, Flags = &h1
@@ -201,6 +201,12 @@ Protected Module LZMA
 
 
 	#tag Constant, Name = CHUNK_SIZE, Type = Double, Dynamic = False, Default = \"16384", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = LIB_LZMA, Type = String, Dynamic = False, Default = \"liblzma", Scope = Private
+		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"liblzma.dll"
+		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"liblzma.so.5"
+		#Tag Instance, Platform = Mac OS, Language = Default, Definition  = \"liblzma.5.dylib"
 	#tag EndConstant
 
 	#tag Constant, Name = LZMA_BLOCK_HEADER_SIZE_MAX, Type = Double, Dynamic = False, Default = \"1024", Scope = Private
