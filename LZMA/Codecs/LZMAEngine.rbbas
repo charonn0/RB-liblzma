@@ -42,6 +42,13 @@ Protected Class LZMAEngine
 
 	#tag Method, Flags = &h0
 		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
+		  ' Performs encoding/decoding
+		  ' ReadFrom is a Readable object from which input bytes are read.
+		  ' WriteTo is a Writeable object to which output bytes are written.
+		  ' Action is the encoder action to perform on the input bytes
+		  ' ReadCount is the number of input bytes to read. Specify -1 to continue reading until ReadFrom.EOF
+		  ' Returns True if the operation succeeded and the codec is ready for more input.
+		  
 		  If Not IsOpen Then Return False
 		  Dim outbuff As New MemoryBlock(CHUNK_SIZE)
 		  Dim count As Integer

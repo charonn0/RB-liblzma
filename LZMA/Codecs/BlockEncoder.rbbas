@@ -4,6 +4,9 @@ Inherits LZMA.Codecs.LZMAEngine
 Implements LZMA.Compressor
 	#tag Method, Flags = &h0
 		Sub Constructor(ChecksumType As LZMA.ChecksumType)
+		  ' Constructs a block encoder.
+		  ' Checksum is the type of Checksum to use
+		  
 		  Super.Constructor()
 		  mBlock.Version = 1
 		  mBlock.Check = ChecksumType

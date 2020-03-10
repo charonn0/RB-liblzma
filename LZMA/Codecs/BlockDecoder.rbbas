@@ -4,6 +4,10 @@ Inherits LZMA.Codecs.LZMAEngine
 Implements LZMA.Decompressor
 	#tag Method, Flags = &h0
 		Sub Constructor(ChecksumType As LZMA.ChecksumType, CompressedSize As UInt64)
+		  ' Constructs a block decoder.
+		  ' Checksum is the type of Checksum used
+		  ' CompressedSize is the actual compressed size of the data
+		  
 		  Super.Constructor()
 		  mBlock.Version = 1
 		  mBlock.HeaderSize = LZMA_BLOCK_HEADER_SIZE_MIN

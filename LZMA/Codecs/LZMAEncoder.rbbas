@@ -4,6 +4,8 @@ Inherits LZMA.Codecs.LZMAEngine
 Implements LZMA.Compressor
 	#tag Method, Flags = &h0
 		Sub Constructor()
+		  ' Constructs an encoder for the original LZMA1 algorithm.
+		  
 		  Super.Constructor()
 		  mOptions.Depth = 0
 		  mOptions.DictionarySize = 0

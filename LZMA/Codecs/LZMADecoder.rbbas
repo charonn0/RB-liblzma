@@ -4,6 +4,9 @@ Inherits LZMA.Codecs.LZMAEngine
 Implements LZMA.Decompressor
 	#tag Method, Flags = &h0
 		Sub Constructor(MemoryLimit As UInt64 = 0)
+		  ' Constructs a decoder for the original LZMA1 algorithm.
+		  ' MemoryLimit defines the maximum memory use; specify zero to disable memory limiting.
+		  
 		  Super.Constructor()
 		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
 		  mLastError = lzma_alone_decoder(mStream, MemoryLimit)

@@ -4,6 +4,8 @@ Inherits LZMA.Codecs.LZMAEngine
 Implements LZMA.Decompressor
 	#tag Method, Flags = &h0
 		Sub Constructor()
+		  ' Constructs a decoder for raw LZMA
+		  
 		  Super.Constructor()
 		  Dim filters As New MemoryBlock(1024)
 		  Dim p As Ptr = filters
