@@ -1,6 +1,13 @@
 #tag Module
 Protected Module LZMA
 	#tag Method, Flags = &h1
+		Protected Function ChecksumLength(Type As LZMA.ChecksumType) As UInt32
+		  If Not IsAvailable Then Return 0
+		  Return lzma_check_size(Type)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function CRC32(Data As MemoryBlock, LastCRC As UInt32 = 0, DataSize As Integer = - 1) As UInt32
 		  ' Calculate the CRC32 checksum for the Data. Pass back the returned value
 		  ' to continue processing.
@@ -167,7 +174,7 @@ Protected Module LZMA
 		  Dim IsXZ As Boolean
 		  Try
 		    bs = New BinaryStream(Target)
-		    IsXZ = bs.Is()
+		    IsXZ = bs.IsXZCompressed()
 		  Catch
 		    IsXZ = False
 		  Finally
@@ -202,7 +209,15 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_check_size Lib LIB_LZMA (CheckType As ChecksumType) As UInt32
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_code Lib LIB_LZMA (ByRef Stream As lzma_stream, Action As EncodeAction) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_cputhreads Lib LIB_LZMA () As UInt32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -258,6 +273,22 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_physmem Lib LIB_LZMA () As UInt64
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_properties_decode Lib LIB_LZMA (Filter As Ptr, Allocator As Ptr, Props As UInt8, ByRef Props As UInt8, PropsSize As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_properties_encode Lib LIB_LZMA (Filter As Ptr, ByRef Props As UInt8) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_properties_size Lib LIB_LZMA (ByRef Size As UInt32, Filter As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_raw_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
 	#tag EndExternalMethod
 
@@ -296,6 +327,25 @@ Protected Module LZMA
 		  If IsAvailable Then Return lzma_version_string()
 		End Function
 	#tag EndMethod
+
+
+	#tag ComputedProperty, Flags = &h1
+		#tag Getter
+			Get
+			  If IsAvailable Then Return lzma_cputhreads()
+			End Get
+		#tag EndGetter
+		Protected CPUCount As UInt32
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h1
+		#tag Getter
+			Get
+			  If IsAvailable Then Return lzma_physmem()
+			End Get
+		#tag EndGetter
+		Protected TotalPhysicalMemory As UInt64
+	#tag EndComputedProperty
 
 
 	#tag Constant, Name = CHUNK_SIZE, Type = Double, Dynamic = False, Default = \"16384", Scope = Private
