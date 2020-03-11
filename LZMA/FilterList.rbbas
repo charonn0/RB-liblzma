@@ -43,7 +43,12 @@ Protected Class FilterList
 	#tag Method, Flags = &h0
 		Function Operator_Convert() As Ptr
 		  Dim count As Integer = UBound(mFilters)
-		  If count > 4 Or count < 0 Then Raise New LZMAException(ErrorCodes.ProgError)
+		  If count > 4 Then Raise New LZMAException(ErrorCodes.ProgError)
+		  If count < 1 Then
+		    Dim mb As New MemoryBlock(lzma_filter.Size)
+		    mb.UInt64Value(0) = LZMA_VLI_UNKNOWN
+		    Return mb
+		  End If
 		  
 		  Dim lst As New MemoryBlock((mFilters.Ubound + 2) * lzma_filter.Size)
 		  Dim index As Integer
