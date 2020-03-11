@@ -56,21 +56,15 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h1
 		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType, Optional Filters As LZMA.FilterList) As LZMA.Compressor
-		  If Filters = Nil Or Filters.Count = 0 Then
-		    ' use defaults
-		    Filters = New LZMA.FilterList
-		    Filters.AppendFilter(LZMA.LZMA_FILTER_X86, Nil)
-		    Filters.AppendFilter(LZMA.LZMA_FILTER_LZMA2, filters.GetPresetOptions(6))
-		  End If
-		  
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
-		    Return New LZMA.Codecs.XZEncoder(Filters, Checksum)
+		    Return New LZMA.Codecs.XZEncoder(Preset, Filters, Checksum)
 		  Case LZMA.Codec.lzma1
-		    Return New LZMA.Codecs.LZMAEncoder()
+		    Return New LZMA.Codecs.LZMAEncoder(Preset)
 		  Case LZMA.Codec.Raw
 		    Return New LZMA.Codecs.RawEncoder(Filters)
 		  Else
+		    If Preset > 9 Then Preset = 9 Or LZMA_PRESET_EXTREME
 		    Return New LZMA.Codecs.BasicEncoder(Preset, Checksum)
 		  End Select
 		End Function
