@@ -41,6 +41,20 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function DecoderMemoryUse(Preset As UInt32) As UInt64
+		  If Not IsAvailable Then Return 0
+		  Return lzma_easy_decoder_memusage(Preset)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function EncoderMemoryUse(Preset As UInt32) As UInt64
+		  If Not IsAvailable Then Return 0
+		  Return lzma_easy_encoder_memusage(Preset)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType, Optional Filters As LZMA.FilterList) As LZMA.Compressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
@@ -122,7 +136,15 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_easy_decoder_memusage Lib LIB_LZMA (Preset As UInt32) As UInt64
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_easy_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Preset As UInt32, Check As ChecksumType) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_easy_encoder_memusage Lib LIB_LZMA (Preset As UInt32) As UInt64
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -159,6 +181,10 @@ Protected Module LZMA
 
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_raw_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_raw_decoder_memusage Lib LIB_LZMA (Filters As Ptr) As UInt64
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
