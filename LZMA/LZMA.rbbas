@@ -1,23 +1,5 @@
 #tag Module
 Protected Module LZMA
-	#tag Method, Flags = &h21
-		Private Function ConvertFilterList(Filters() As LZMA.lzma_filter) As MemoryBlock
-		  Dim count As Integer = UBound(Filters)
-		  If count > 4 Or count < 0 Then Raise New LZMAException(ErrorCodes.ProgError)
-		  
-		  Dim lst As New MemoryBlock((Filters.Ubound + 2) * lzma_filter.Size)
-		  Dim index As Integer
-		  For index = 0 To UBound(Filters)
-		    lst.UInt64Value(index * lzma_filter.Size) = Filters(index).ID
-		    lst.Ptr((index * lzma_filter.Size) + 8) = Filters(index).Options
-		  Next
-		  
-		  lst.UInt64Value(index * lzma_filter.Size) = LZMA_VLI_UNKNOWN
-		  
-		  Return lst
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h1
 		Protected Function CRC32(Data As MemoryBlock, LastCRC As UInt32 = 0, DataSize As Integer = - 1) As UInt32
 		  ' Calculate the CRC32 checksum for the Data. Pass back the returned value
