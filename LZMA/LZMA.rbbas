@@ -70,14 +70,14 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function GetDecompressor(Codec As LZMA.Codec, MemoryLimit As UInt64, Flags As UInt32) As LZMA.Decompressor
+		Protected Function GetDecompressor(Codec As LZMA.Codec, MemoryLimit As UInt64, Flags As UInt32, Optional Filters As LZMA.FilterList) As LZMA.Decompressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
 		    Return New LZMA.Codecs.XZDecoder(MemoryLimit, Flags)
 		  Case LZMA.Codec.lzma1
 		    Return New LZMA.Codecs.LZMADecoder(MemoryLimit)
 		  Case LZMA.Codec.Raw
-		    Return New LZMA.Codecs.RawDecoder()
+		    Return New LZMA.Codecs.RawDecoder(Filters)
 		  Else
 		    Return New LZMA.Codecs.BasicDecoder(MemoryLimit, Flags)
 		  End Select
