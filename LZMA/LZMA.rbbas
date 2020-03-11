@@ -91,6 +91,17 @@ Protected Module LZMA
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function GetPresetOptions(Preset As UInt32) As MemoryBlock
+		  If Not LZMA.IsAvailable Then Return Nil
+		  Dim opts As New MemoryBlock(lzma_options_lzma.Size)
+		  If lzma_lzma_preset(opts, Preset) Then ' returns true if the preset is *not* supported
+		    Raise New LZMAException(ErrorCodes.ProgError)
+		  End If
+		  Return opts
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function IsAvailable() As Boolean
 		  Static avail As Boolean

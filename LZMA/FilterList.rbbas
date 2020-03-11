@@ -30,17 +30,6 @@ Protected Class FilterList
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function GetPresetOptions(Preset As UInt32) As MemoryBlock
-		  If Not LZMA.IsAvailable Then Return Nil
-		  Dim opts As New MemoryBlock(lzma_options_lzma.Size)
-		  If lzma_lzma_preset(opts, Preset) Then ' returns true if the preset is *not* supported
-		    Raise New LZMAException(ErrorCodes.ProgError)
-		  End If
-		  Return opts
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub InsertFilter(Index As Integer, FilterID As UInt64, Options As MemoryBlock)
 		  If Count >= 3 Or Index > Count - 1 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  Dim filter As lzma_filter
