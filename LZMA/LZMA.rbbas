@@ -124,6 +124,59 @@ Protected Module LZMA
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function IsXZCompressed(Extends Target As BinaryStream) As Boolean
+		  //Checks the XZ magic number. Returns True if the Target is likely a XZ stream
+		  
+		  Dim IsXZ As Boolean
+		  Dim pos As UInt64 = Target.Position
+		  If Target.ReadUInt8 = &hFD And Target.ReadUInt8 = &h37 And _
+		    Target.ReadUInt8 = &h7A And Target.ReadUInt8 = &h58 And _
+		    Target.ReadUInt8 = &h5A And Target.ReadUInt8 = &h00 Then IsXZ = True 'maybe
+		    Target.Position = pos
+		    Return IsXZ
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function IsXZCompressed(Extends TargetFile As FolderItem) As Boolean
+		  //Checks the XZ magic number. Returns True if the TargetFile is likely a XZ stream
+		  
+		  If Not TargetFile.Exists Then Return False
+		  If TargetFile.Directory Then Return False
+		  Dim bs As BinaryStream
+		  Dim IsXZ As Boolean
+		  Try
+		    bs = BinaryStream.Open(TargetFile)
+		    IsXZ = bs.IsXZCompressed()
+		  Catch
+		    IsXZ = False
+		  Finally
+		    If bs <> Nil Then bs.Close
+		  End Try
+		  Return IsXZ
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function IsXZCompressed(Extends Target As MemoryBlock) As Boolean
+		  //Checks the XZ magic number. Returns True if the Target is likely a XZ stream
+		  
+		  If Target.Size = -1 Then Return False
+		  Dim bs As BinaryStream
+		  Dim IsXZ As Boolean
+		  Try
+		    bs = New BinaryStream(Target)
+		    IsXZ = bs.Is()
+		  Catch
+		    IsXZ = False
+		  Finally
+		    If bs <> Nil Then bs.Close
+		  End Try
+		  Return IsXZ
+		End Function
+	#tag EndMethod
+
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_alone_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, MemLimit As UInt64) As ErrorCodes
 	#tag EndExternalMethod
