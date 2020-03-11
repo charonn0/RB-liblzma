@@ -33,7 +33,9 @@ Protected Class FilterList
 		 Shared Function GetPresetOptions(Preset As UInt32) As MemoryBlock
 		  If Not LZMA.IsAvailable Then Return Nil
 		  Dim opts As New MemoryBlock(lzma_options_lzma.Size)
-		  If Not lzma_lzma_preset(opts, Preset) Then Break
+		  If lzma_lzma_preset(opts, Preset) Then ' returns true if the preset is *not* supported
+		    Raise New LZMAException(ErrorCodes.ProgError)
+		  End If
 		  Return opts
 		End Function
 	#tag EndMethod
