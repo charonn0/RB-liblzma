@@ -59,7 +59,7 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function GetCompressor(Preset As UInt32 = 6, Codec As LZMA.Codec, Optional Filters() As LZMA.lzma_filter, Checksum As LZMA.ChecksumType) As LZMA.Compressor
+		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType, Optional Filters As LZMA.FilterList) As LZMA.Compressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
 		    Return New LZMA.Codecs.XZEncoder(Filters, Checksum)

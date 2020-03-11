@@ -30,7 +30,7 @@ Implements Readable,Writeable
 		  ' input to be decompressed.
 		  
 		  If Source.Length = Source.Position Then 'compress into Source
-		    Me.Constructor(GetCompressor(Level, Codec.Detect, Checksum), Source)
+		    Me.Constructor(GetCompressor(Codec.Detect, Level, Checksum), Source)
 		  Else ' decompress from Source
 		    Me.Constructor(GetDecompressor(Codec.Detect, MemoryLimit, 0), Source)
 		  End If
@@ -83,7 +83,7 @@ Implements Readable,Writeable
 		 Shared Function Create(OutputStream As Writeable, Level As Integer, Checksum As LZMA.ChecksumType = LZMA.ChecksumType.CRC32) As LZMA.LZMAStream
 		  ' Create a compression stream where compressed output is written to the OutputStream object.
 		  
-		  Return New LZMAStream(GetCompressor(Level, Codec.Detect, Checksum), OutputStream)
+		  Return New LZMAStream(GetCompressor(Codec.Detect, Level, Checksum), OutputStream)
 		  
 		End Function
 	#tag EndMethod
