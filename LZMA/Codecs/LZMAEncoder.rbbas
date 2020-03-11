@@ -32,12 +32,6 @@ Implements LZMA.Compressor
 
 	#tag ViewBehavior
 		#tag ViewProperty
-			Name="Extreme"
-			Group="Behavior"
-			Type="Boolean"
-			InheritedFrom="LZMA.Compressor"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
@@ -45,17 +39,17 @@ Implements LZMA.Compressor
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="IsOpen"
+			Group="Behavior"
+			Type="Boolean"
+			InheritedFrom="LZMA.Codecs.LZMAEngine"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Level"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="LZMA.Compressor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
