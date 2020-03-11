@@ -48,7 +48,7 @@ Protected Module LZMA
 		  Case LZMA.Codec.lzma1
 		    Return New LZMA.Codecs.LZMAEncoder()
 		  Case LZMA.Codec.Raw
-		    Return New LZMA.Codecs.RawEncoder(Preset)
+		    Return New LZMA.Codecs.RawEncoder(Filters)
 		  Else
 		    Return New LZMA.Codecs.BasicEncoder(Preset, Checksum)
 		  End Select
