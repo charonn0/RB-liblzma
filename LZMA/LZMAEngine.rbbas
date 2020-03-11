@@ -6,6 +6,12 @@ Protected Class LZMAEngine
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function AvailOut() As UInt32
+		  return mStream.AvailOut
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Sub Constructor()
 		  If Not LZMA.IsAvailable() Then Raise New PlatformNotSupportedException
@@ -32,6 +38,12 @@ Protected Class LZMAEngine
 		  If mStream.InternalState <> 0 Then mLastError = lzma_end(mStream)
 		  mStream.InternalState = 0
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function IsOpen() As Boolean
+		  Return mStream.InternalState <> 0
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -93,24 +105,6 @@ Protected Class LZMAEngine
 		End Function
 	#tag EndMethod
 
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mStream.AvailOut
-			End Get
-		#tag EndGetter
-		AvailOut As UInt32
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  Return mStream.InternalState <> 0
-			End Get
-		#tag EndGetter
-		IsOpen As Boolean
-	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		LastError As ErrorCodes

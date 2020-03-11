@@ -1,6 +1,6 @@
 #tag Class
 Protected Class XZEncoder
-Inherits LZMA.Codecs.LZMAEngine
+Inherits LZMA.LZMAEngine
 Implements LZMA.Compressor
 	#tag Method, Flags = &h0
 		Sub Constructor(Filters As LZMA.FilterList, Checksum As LZMA.ChecksumType)
