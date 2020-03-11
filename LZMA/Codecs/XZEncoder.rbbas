@@ -3,11 +3,10 @@ Protected Class XZEncoder
 Inherits LZMA.Codecs.LZMAEngine
 Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor(Filters() As LZMA.lzma_filter, Checksum As LZMA.ChecksumType)
+		Sub Constructor(Filters As LZMA.FilterList, Checksum As LZMA.ChecksumType)
 		  ' compress using custom filters
 		  Super.Constructor()
-		  Dim f As MemoryBlock = ConvertFilterList(Filters)
-		  mLastError = lzma_stream_encoder(mStream, f, Checksum)
+		  mLastError = lzma_stream_encoder(mStream, Filters, Checksum)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		End Sub
 	#tag EndMethod
