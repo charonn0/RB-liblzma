@@ -3,16 +3,11 @@ Protected Class RawDecoder
 Inherits LZMA.LZMAEngine
 Implements LZMA.Decompressor
 	#tag Method, Flags = &h0
-		Sub Constructor()
+		Sub Constructor(Filters As LZMA.FilterList)
 		  ' Constructs a decoder for raw LZMA
 		  
 		  Super.Constructor()
-		  Dim filters As New MemoryBlock(1024)
-		  Dim p As Ptr = filters
-		  p.lzma_filter.ID = LZMA_FILTER_LZMA1
-		  p = Ptr(Integer(p) + lzma_filter.Size)
-		  p.lzma_filter.ID = LZMA_VLI_UNKNOWN
-		  mLastError = lzma_raw_decoder(mStream, filters)
+		  mLastError = lzma_raw_decoder(mStream, Filters)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		  
 		End Sub
