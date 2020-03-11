@@ -8,17 +8,17 @@ Implements LZMA.Compressor
 		  Super.Constructor()
 		  mLastError = lzma_stream_encoder(mStream, Filters, Checksum)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		  mFilters = Filters
 		End Sub
 	#tag EndMethod
 
 
+	#tag Property, Flags = &h21
+		Private mFilters As FilterList
+	#tag EndProperty
+
+
 	#tag ViewBehavior
-		#tag ViewProperty
-			Name="Extreme"
-			Group="Behavior"
-			Type="Boolean"
-			InheritedFrom="LZMA.Compressor"
-		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
