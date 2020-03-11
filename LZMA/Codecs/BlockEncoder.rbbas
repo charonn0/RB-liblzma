@@ -3,21 +3,27 @@ Protected Class BlockEncoder
 Inherits LZMA.LZMAEngine
 Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor(ChecksumType As LZMA.ChecksumType)
+		Sub Constructor(Filters As LZMA.FilterList, ChecksumType As LZMA.ChecksumType)
 		  ' Constructs a block encoder.
 		  ' Checksum is the type of Checksum to use
 		  
 		  Super.Constructor()
 		  mBlock.Version = 1
 		  mBlock.Check = ChecksumType
+		  mBlock.Filters = Filters
 		  mLastError = lzma_block_encoder(mStream, mBlock)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		  mFilters = Filters
 		End Sub
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h1
-		Protected mBlock As lzma_block
+	#tag Property, Flags = &h21
+		Private mBlock As lzma_block
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mFilters As FilterList
 	#tag EndProperty
 
 
