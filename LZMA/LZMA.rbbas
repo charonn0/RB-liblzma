@@ -236,10 +236,28 @@ Protected Module LZMA
 	#tag Constant, Name = LZMA_DICT_SIZE_MIN, Type = Double, Dynamic = False, Default = \"4096", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = LZMA_FILTER_LZMA1, Type = Double, Dynamic = False, Default = \"&h4000000000000001", Scope = Private
+	#tag Constant, Name = LZMA_FILTER_ARM, Type = Double, Dynamic = False, Default = \"&h07", Scope = Protected
 	#tag EndConstant
 
-	#tag Constant, Name = LZMA_FILTER_LZMA2, Type = Double, Dynamic = False, Default = \"&h21", Scope = Private
+	#tag Constant, Name = LZMA_FILTER_ARMTHUMB, Type = Double, Dynamic = False, Default = \"&h08", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_FILTER_IA64, Type = Double, Dynamic = False, Default = \"&h06", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_FILTER_LZMA1, Type = Double, Dynamic = False, Default = \"&h4000000000000001", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_FILTER_LZMA2, Type = Double, Dynamic = False, Default = \"&h21", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_FILTER_POWERPC, Type = Double, Dynamic = False, Default = \"&h05", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_FILTER_SPARC, Type = Double, Dynamic = False, Default = \"&h09", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_FILTER_X86, Type = Double, Dynamic = False, Default = \"&h04", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = LZMA_IGNORE_CHECK, Type = Double, Dynamic = False, Default = \"&h10", Scope = Private
