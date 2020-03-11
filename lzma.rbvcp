@@ -20,6 +20,7 @@ Class=XZDecoder;LZMA/Codecs/XZDecoder.rbbas;&h15008FFF;&h1ADAC7FF;false
 Class=XZEncoder;LZMA/Codecs/XZEncoder.rbbas;&h3A5747FF;&h1ADAC7FF;false
 Class=LZMAStream;LZMA/LZMAStream.rbbas;&h50C6BFFF;&h4A67EFFF;false
 Interface=Decompressor;LZMA/Decompressor.rbbas;&h6FFDB7FF;&h4A67EFFF;false
+Class=FilterList;LZMA/FilterList.rbbas;&h6A811FFF;&h4A67EFFF;false
 MajorVersion=1
 MinorVersion=0
 SubVersion=0
