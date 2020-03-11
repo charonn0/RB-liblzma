@@ -317,7 +317,7 @@ Protected Module LZMA
 		  Check As ChecksumType
 		  CompressedSize As UInt64
 		  UncompressedSize As UInt64
-		  Filters As lzma_filter
+		  Filters As Ptr
 		  Checksum As String*64
 		  Reserved1 As Ptr
 		  Reserved2 As Ptr
