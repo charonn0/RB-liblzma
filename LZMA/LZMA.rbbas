@@ -336,7 +336,7 @@ Protected Module LZMA
 		Reserved15 As UInt32
 	#tag EndStructure
 
-	#tag Structure, Name = lzma_filter, Flags = &h1, Attributes = \"StructureAlignment \x3D 8"
+	#tag Structure, Name = lzma_filter, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
 		ID As UInt64
 		Options As Ptr
 	#tag EndStructure
