@@ -122,7 +122,7 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_alone_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Options As lzma_options_lzma) As ErrorCodes
+		Private Soft Declare Function lzma_alone_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Options As Ptr) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
