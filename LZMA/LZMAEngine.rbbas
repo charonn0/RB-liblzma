@@ -1,5 +1,17 @@
 #tag Class
-Private Class LZMAEngine
+Protected Class LZMAEngine
+	#tag Method, Flags = &h0
+		Function AvailIn() As UInt32
+		  return mStream.AvailIn
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function AvailOut() As UInt32
+		  return mStream.AvailOut
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Sub Constructor()
 		  If Not LZMA.IsAvailable() Then Raise New PlatformNotSupportedException
@@ -29,7 +41,26 @@ Private Class LZMAEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function IsOpen() As Boolean
+		  Return mStream.InternalState <> 0
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LastError() As LZMA.ErrorCodes
+		  return mLastError
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
+		  ' Performs encoding/decoding
+		  ' ReadFrom is a Readable object from which input bytes are read.
+		  ' WriteTo is a Writeable object to which output bytes are written.
+		  ' Action is the encoder action to perform on the input bytes
+		  ' ReadCount is the number of input bytes to read. Specify -1 to continue reading until ReadFrom.EOF
+		  ' Returns True if the operation succeeded and the codec is ready for more input.
+		  
 		  If Not IsOpen Then Return False
 		  Dim outbuff As New MemoryBlock(CHUNK_SIZE)
 		  Dim count As Integer
@@ -62,31 +93,20 @@ Private Class LZMAEngine
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function TotalIn() As UInt64
+		  return mStream.TotalIn
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function TotalOut() As UInt64
+		  return mStream.TotalOut
+		End Function
+	#tag EndMethod
+
 
 	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mStream.AvailIn
-			End Get
-		#tag EndGetter
-		AvailIn As UInt32
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  Return mStream.InternalState <> 0
-			End Get
-		#tag EndGetter
-		IsOpen As Boolean
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mLastError
-			End Get
-		#tag EndGetter
 		LastError As ErrorCodes
 	#tag EndComputedProperty
 
@@ -120,24 +140,6 @@ Private Class LZMAEngine
 	#tag Property, Flags = &h1
 		Protected mStream As lzma_stream
 	#tag EndProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mStream.TotalIn
-			End Get
-		#tag EndGetter
-		TotalIn As UInt64
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mStream.TotalOut
-			End Get
-		#tag EndGetter
-		TotalOut As UInt64
-	#tag EndComputedProperty
 
 
 	#tag ViewBehavior

@@ -1,37 +1,33 @@
 #tag Class
-Protected Class BlockDecoder
-Inherits LZMA.Compressor
+Protected Class BlockEncoder
+Inherits LZMA.LZMAEngine
+Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor(ChecksumType As LZMA.ChecksumType, CompressedSize As UInt64)
+		Sub Constructor(Filters As LZMA.FilterList, ChecksumType As LZMA.ChecksumType)
+		  ' Constructs a block encoder.
+		  ' Checksum is the type of Checksum to use
+		  
 		  Super.Constructor()
 		  mBlock.Version = 1
-		  mBlock.HeaderSize = LZMA_BLOCK_HEADER_SIZE_MIN
 		  mBlock.Check = ChecksumType
-		  mBlock.CompressedSize = CompressedSize
-		  mLastError = lzma_block_decoder(mStream, mBlock)
+		  mBlock.Filters = Filters
+		  mLastError = lzma_block_encoder(mStream, mBlock)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		  mFilters = Filters
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
-		  Return Super.Perform(ReadFrom, WriteTo, Action, ReadCount)
-		End Function
-	#tag EndMethod
 
+	#tag Property, Flags = &h21
+		Private mBlock As lzma_block
+	#tag EndProperty
 
-	#tag Property, Flags = &h1
-		Protected mBlock As lzma_block
+	#tag Property, Flags = &h21
+		Private mFilters As FilterList
 	#tag EndProperty
 
 
 	#tag ViewBehavior
-		#tag ViewProperty
-			Name="Extreme"
-			Group="Behavior"
-			Type="Boolean"
-			InheritedFrom="LZMA.Compressor"
-		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
@@ -40,17 +36,17 @@ Inherits LZMA.Compressor
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="IsOpen"
+			Group="Behavior"
+			Type="Boolean"
+			InheritedFrom="LZMA.Codecs.LZMAEngine"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Level"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="LZMA.Compressor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"

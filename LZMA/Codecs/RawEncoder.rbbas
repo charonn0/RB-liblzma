@@ -1,34 +1,20 @@
-#tag Interface
-Protected Interface Compressor
+#tag Class
+Protected Class RawEncoder
+Inherits LZMA.LZMAEngine
+Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Function IsOpen() As Boolean
+		Sub Constructor(Filters As LZMA.FilterList)
+		  Super.Constructor()
+		  mLastError = lzma_raw_encoder(mStream, filters)
+		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		  
-		End Function
+		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function LastError() As LZMA.ErrorCodes
-		  
-		End Function
-	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function TotalIn() As UInt64
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function TotalOut() As UInt64
-		  
-		End Function
-	#tag EndMethod
+	#tag Property, Flags = &h21
+		Private mOptions As lzma_options_lzma
+	#tag EndProperty
 
 
 	#tag ViewBehavior
@@ -38,6 +24,12 @@ Protected Interface Compressor
 			Group="ID"
 			InitialValue="-2147483648"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IsOpen"
+			Group="Behavior"
+			Type="Boolean"
+			InheritedFrom="LZMA.Codecs.LZMAEngine"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
@@ -66,5 +58,5 @@ Protected Interface Compressor
 			InheritedFrom="Object"
 		#tag EndViewProperty
 	#tag EndViewBehavior
-End Interface
-#tag EndInterface
+End Class
+#tag EndClass

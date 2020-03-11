@@ -1,38 +1,20 @@
 #tag Class
-Protected Class LZMAEncoder
-Inherits LZMAEngine
+Protected Class RawDecoder
+Inherits LZMA.LZMAEngine
+Implements LZMA.Decompressor
 	#tag Method, Flags = &h0
-		Sub Constructor()
-		  Super.Constructor()
-		  mOptions.Depth = 0
-		  mOptions.DictionarySize = 0
-		  mOptions.LiteralContextBitCount = 0
-		  mOptions.LiteralPositionBitCount = 0
-		  mOptions.MatchFinder = LZMAMatchFinder.MF_HC3
-		  mOptions.Mode = LZMAMode.Normal
-		  mOptions.NiceLength = 0
-		  mOptions.PositionBitCount = 0
-		  mOptions.PresetDictionary = Nil
-		  mOptions.PresetDictionarySize = 0
+		Sub Constructor(Filters As LZMA.FilterList)
+		  ' Constructs a decoder for raw LZMA
 		  
-		  mLastError = lzma_alone_encoder(mStream, mOptions)
+		  Super.Constructor()
+		  mLastError = lzma_raw_decoder(mStream, Filters)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		  
 		End Sub
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h21
-		Private mOptions As lzma_options_lzma
-	#tag EndProperty
-
-
 	#tag ViewBehavior
-		#tag ViewProperty
-			Name="Extreme"
-			Group="Behavior"
-			Type="Boolean"
-		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
@@ -41,16 +23,17 @@ Inherits LZMAEngine
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
+			Name="IsOpen"
+			Group="Behavior"
+			Type="Boolean"
+			InheritedFrom="LZMA.Codecs.LZMAEngine"
+		#tag EndViewProperty
+		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Level"
-			Group="Behavior"
-			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"

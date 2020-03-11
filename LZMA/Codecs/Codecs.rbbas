@@ -1,36 +1,5 @@
-#tag Interface
-Protected Interface Compressor
-	#tag Method, Flags = &h0
-		Function IsOpen() As Boolean
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function LastError() As LZMA.ErrorCodes
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function TotalIn() As UInt64
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function TotalOut() As UInt64
-		  
-		End Function
-	#tag EndMethod
-
-
+#tag Module
+Private Module Codecs
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"
@@ -66,5 +35,5 @@ Protected Interface Compressor
 			InheritedFrom="Object"
 		#tag EndViewProperty
 	#tag EndViewBehavior
-End Interface
-#tag EndInterface
+End Module
+#tag EndModule

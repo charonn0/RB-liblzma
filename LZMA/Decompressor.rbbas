@@ -1,13 +1,45 @@
-#tag Class
-Protected Class Decompressor
-Inherits LZMAEngine
+#tag Interface
+Protected Interface Decompressor
 	#tag Method, Flags = &h0
-		Sub Constructor(MemoryLimit As UInt64 = 0, Flags As UInt32 = LZMA.LZMA_CONCATENATED)
-		  Super.Constructor()
-		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
-		  mLastError = lzma_auto_decoder(mStream, MemoryLimit, Flags)
-		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
-		End Sub
+		Function AvailIn() As UInt32
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function AvailOut() As UInt32
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function IsOpen() As Boolean
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LastError() As LZMA.ErrorCodes
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function TotalIn() As UInt64
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function TotalOut() As UInt64
+		  
+		End Function
 	#tag EndMethod
 
 
@@ -46,5 +78,5 @@ Inherits LZMAEngine
 			InheritedFrom="Object"
 		#tag EndViewProperty
 	#tag EndViewBehavior
-End Class
-#tag EndClass
+End Interface
+#tag EndInterface

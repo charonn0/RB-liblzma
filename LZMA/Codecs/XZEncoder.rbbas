@@ -1,21 +1,27 @@
 #tag Class
-Protected Class RawEncoder
-Inherits LZMAEngine
+Protected Class XZEncoder
+Inherits LZMA.LZMAEngine
+Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor()
-		  Super.Constructor()
-		  Dim filters As New MemoryBlock(1024)
-		  Dim p As Ptr = filters
-		  p.lzma_filter.ID = LZMA_FILTER_LZMA1
-		  mLastError = lzma_raw_encoder(mStream, filters)
-		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		Sub Constructor(Preset As UInt32, Filters As LZMA.FilterList, Checksum As LZMA.ChecksumType)
+		  If Filters = Nil Then
+		    ' use default xz Filters
+		    Filters = New LZMA.FilterList
+		    Filters.AppendFilter(LZMA.LZMA_FILTER_X86, Nil)
+		    Filters.AppendFilter(LZMA.LZMA_FILTER_LZMA2, GetPresetOptions(Preset))
+		  End If
 		  
+		  ' compress using the specified filters
+		  Super.Constructor()
+		  mLastError = lzma_stream_encoder(mStream, Filters, Checksum)
+		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		  mFilters = Filters
 		End Sub
 	#tag EndMethod
 
 
 	#tag Property, Flags = &h21
-		Private mOptions As lzma_options_lzma
+		Private mFilters As FilterList
 	#tag EndProperty
 
 
@@ -26,6 +32,12 @@ Inherits LZMAEngine
 			Group="ID"
 			InitialValue="-2147483648"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IsOpen"
+			Group="Behavior"
+			Type="Boolean"
+			InheritedFrom="LZMA.Codecs.LZMAEngine"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
