@@ -97,6 +97,19 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function GetStandardFilterList(Preset As UInt32) As LZMA.FilterList
+		  Dim filters As New FilterList
+		  #If TargetX86 Then
+		    filters.AppendFilter(LZMA_FILTER_X86, Nil)
+		  #Else
+		    Raise New PlatformNotSupportedException
+		  #endif
+		  filters.AppendFilter(LZMA_FILTER_LZMA2, GetPresetOptions(Preset))
+		  Return filters
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function IsAvailable() As Boolean
 		  Static avail As Boolean
 		  If Not avail Then avail = System.IsFunctionAvailable("lzma_easy_encoder", "liblzma")
