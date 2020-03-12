@@ -62,6 +62,19 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function GetBasicFilterList(Preset As UInt32, FilterID As UInt64 = LZMA.LZMA_FILTER_LZMA2) As LZMA.FilterList
+		  Dim filters As New FilterList
+		  #If TargetX86 Then
+		    filters.AppendFilter(LZMA_FILTER_X86, Nil)
+		  #Else
+		    Raise New PlatformNotSupportedException
+		  #endif
+		  filters.AppendFilter(FilterID, GetPresetOptions(Preset))
+		  Return filters
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType, Optional Filters As LZMA.FilterList) As LZMA.Compressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
@@ -100,19 +113,6 @@ Protected Module LZMA
 		    Raise New LZMAException(ErrorCodes.ProgError)
 		  End If
 		  Return opts
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function GetStandardFilterList(Preset As UInt32) As LZMA.FilterList
-		  Dim filters As New FilterList
-		  #If TargetX86 Then
-		    filters.AppendFilter(LZMA_FILTER_X86, Nil)
-		  #Else
-		    Raise New PlatformNotSupportedException
-		  #endif
-		  filters.AppendFilter(LZMA_FILTER_LZMA2, GetPresetOptions(Preset))
-		  Return filters
 		End Function
 	#tag EndMethod
 
