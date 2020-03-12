@@ -18,9 +18,15 @@ Protected Class FilterList
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetFilterID(Index As Integer) As UInt64
+		Function FilterID(Index As Integer) As UInt64
 		  Return mFilters(Index).ID
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub FilterID(Index As Integer, Assigns NewFilter As UInt64)
+		  mFilters(Index).ID = NewFilter
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
