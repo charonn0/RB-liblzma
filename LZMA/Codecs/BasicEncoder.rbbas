@@ -3,7 +3,7 @@ Protected Class BasicEncoder
 Inherits LZMA.LZMAEngine
 Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor(Preset As Integer, Checksum As LZMA.ChecksumType, Extreme As Boolean = False)
+		Sub Constructor(Preset As UInt32, Checksum As LZMA.ChecksumType, Extreme As Boolean = False)
 		  ' Constructs an encoder that uses the XZ file format.
 		  ' Preset is the compression level (1-9)
 		  ' Checksum is the type of Checksum to use
@@ -11,7 +11,7 @@ Implements LZMA.Compressor
 		  
 		  Super.Constructor()
 		  If Preset < 0 Then Preset = 6
-		  mLevel = Preset
+		  mPreset = Preset
 		  mExtreme = Extreme
 		  If Extreme Then Preset = Preset Or LZMA_PRESET_EXTREME
 		  mLastError = lzma_easy_encoder(mStream, Preset, Checksum)
@@ -29,22 +29,22 @@ Implements LZMA.Compressor
 		Extreme As Boolean
 	#tag EndComputedProperty
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  Return mLevel
-			End Get
-		#tag EndGetter
-		Level As Integer
-	#tag EndComputedProperty
-
 	#tag Property, Flags = &h21
 		Private mExtreme As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mLevel As Integer = 6
+		Private mPreset As UInt32 = 6
 	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Return mPreset
+			End Get
+		#tag EndGetter
+		Preset As UInt32
+	#tag EndComputedProperty
 
 
 	#tag ViewBehavior

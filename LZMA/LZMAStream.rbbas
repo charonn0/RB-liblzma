@@ -24,13 +24,13 @@ Implements Readable,Writeable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(Source As BinaryStream, Level As Integer = 6, MemoryLimit As UInt64 = 0, Checksum As LZMA.ChecksumType = LZMA.ChecksumType.CRC32)
+		Sub Constructor(Source As BinaryStream, Preset As UInt32 = 6, MemoryLimit As UInt64 = 0, Checksum As LZMA.ChecksumType = LZMA.ChecksumType.CRC32)
 		  ' Constructs a LZMAStream from the Source BinaryStream. If the Source's current position is equal
 		  ' to its length then compressed output will be appended, otherwise the Source will be used as
 		  ' input to be decompressed.
 		  
 		  If Source.Length = Source.Position Then 'compress into Source
-		    Me.Constructor(GetCompressor(Codec.Detect, Level, Checksum), Source)
+		    Me.Constructor(GetCompressor(Codec.Detect, Preset, Checksum), Source)
 		  Else ' decompress from Source
 		    Me.Constructor(GetDecompressor(Codec.Detect, MemoryLimit, 0), Source)
 		  End If
@@ -56,13 +56,13 @@ Implements Readable,Writeable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(Source As MemoryBlock, Level As Integer = 6, MemoryLimit As UInt64 = 0, Checksum As LZMA.ChecksumType = LZMA.ChecksumType.CRC32)
+		Sub Constructor(Source As MemoryBlock, Preset As UInt32 = 6, MemoryLimit As UInt64 = 0, Checksum As LZMA.ChecksumType = LZMA.ChecksumType.CRC32)
 		  ' Constructs a LZMAStream from the Source MemoryBlock. If the Source's size is zero then
 		  ' compressed output will be appended, otherwise the Source will be used as input
 		  ' to be decompressed.
 		  
 		  If Source.Size >= 0 Then
-		    Me.Constructor(New BinaryStream(Source), Level, MemoryLimit, Checksum)
+		    Me.Constructor(New BinaryStream(Source), Preset, MemoryLimit, Checksum)
 		  Else
 		    Raise New LZMAException(ErrorCodes.ProgError) ' can't use memoryblocks of unknown size!!
 		  End If
@@ -72,18 +72,18 @@ Implements Readable,Writeable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Create(OutputStream As FolderItem, Level As Integer, Overwrite As Boolean = False) As LZMA.LZMAStream
+		 Shared Function Create(OutputStream As FolderItem, Preset As UInt32, Overwrite As Boolean = False) As LZMA.LZMAStream
 		  ' Create a compression stream where compressed output is written to the OutputStream file.
 		  
-		  Return Create(BinaryStream.Create(OutputStream, Overwrite), Level)
+		  Return Create(BinaryStream.Create(OutputStream, Overwrite), Preset)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Create(OutputStream As Writeable, Level As Integer, Checksum As LZMA.ChecksumType = LZMA.ChecksumType.CRC32) As LZMA.LZMAStream
+		 Shared Function Create(OutputStream As Writeable, Preset As UInt32, Checksum As LZMA.ChecksumType = LZMA.ChecksumType.CRC32) As LZMA.LZMAStream
 		  ' Create a compression stream where compressed output is written to the OutputStream object.
 		  
-		  Return New LZMAStream(GetCompressor(Codec.Detect, Level, Checksum), OutputStream)
+		  Return New LZMAStream(GetCompressor(Codec.Detect, Preset, Checksum), OutputStream)
 		  
 		End Function
 	#tag EndMethod
