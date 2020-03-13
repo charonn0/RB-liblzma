@@ -378,6 +378,9 @@ Protected Module LZMA
 	#tag Constant, Name = LZMA_FILTER_ARMTHUMB, Type = Double, Dynamic = False, Default = \"&h08", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = LZMA_FILTER_DELTA, Type = Double, Dynamic = False, Default = \"&h03", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = LZMA_FILTER_IA64, Type = Double, Dynamic = False, Default = \"&h06", Scope = Protected
 	#tag EndConstant
 
