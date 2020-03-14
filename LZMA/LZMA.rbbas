@@ -65,11 +65,11 @@ Protected Module LZMA
 		Protected Function GetBasicFilterList(Preset As UInt32, FilterID As UInt64 = LZMA.LZMA_FILTER_LZMA2) As LZMA.FilterList
 		  Dim filters As New FilterList
 		  #If TargetX86 Then
-		    filters.AppendFilter(LZMA_FILTER_X86, Nil)
+		    filters.Append(LZMA_FILTER_X86, Nil)
 		  #Else
 		    Raise New PlatformNotSupportedException
 		  #endif
-		  filters.AppendFilter(FilterID, GetPresetOptions(Preset))
+		  filters.Append(FilterID, GetPresetOptions(Preset))
 		  Return filters
 		End Function
 	#tag EndMethod

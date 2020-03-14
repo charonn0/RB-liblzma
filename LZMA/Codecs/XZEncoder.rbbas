@@ -7,8 +7,8 @@ Implements LZMA.Compressor
 		  If Filters = Nil Then
 		    ' use default xz Filters
 		    Filters = New LZMA.FilterList
-		    Filters.AppendFilter(LZMA.LZMA_FILTER_X86, Nil)
-		    Filters.AppendFilter(LZMA.LZMA_FILTER_LZMA2, GetPresetOptions(Preset))
+		    Filters.Append(LZMA.LZMA_FILTER_X86, Nil)
+		    Filters.Append(LZMA.LZMA_FILTER_LZMA2, GetPresetOptions(Preset))
 		  End If
 		  
 		  ' compress using the specified filters
