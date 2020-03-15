@@ -75,14 +75,12 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType, Optional Filters As LZMA.FilterList) As LZMA.Compressor
+		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType) As LZMA.Compressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
-		    Return New LZMA.Codecs.XZEncoder(Preset, Filters, Checksum)
+		    Return New LZMA.Codecs.XZEncoder(Preset, Nil, Checksum)
 		  Case LZMA.Codec.lzma1
 		    Return New LZMA.Codecs.LZMAEncoder(Preset)
-		  Case LZMA.Codec.Raw
-		    Return New LZMA.Codecs.RawEncoder(Filters)
 		  Else
 		    If Preset > 9 Then Preset = 9 Or LZMA_PRESET_EXTREME
 		    Return New LZMA.Codecs.BasicEncoder(Preset, Checksum)
@@ -91,14 +89,12 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function GetDecompressor(Codec As LZMA.Codec, MemoryLimit As UInt64, Flags As UInt32, Optional Filters As LZMA.FilterList) As LZMA.Decompressor
+		Protected Function GetDecompressor(Codec As LZMA.Codec, MemoryLimit As UInt64, Flags As UInt32) As LZMA.Decompressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
 		    Return New LZMA.Codecs.XZDecoder(MemoryLimit, Flags)
 		  Case LZMA.Codec.lzma1
 		    Return New LZMA.Codecs.LZMADecoder(MemoryLimit)
-		  Case LZMA.Codec.Raw
-		    Return New LZMA.Codecs.RawDecoder(Filters)
 		  Else
 		    Return New LZMA.Codecs.BasicDecoder(MemoryLimit, Flags)
 		  End Select
