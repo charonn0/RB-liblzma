@@ -62,14 +62,25 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType, Optional Filters As LZMA.FilterList) As LZMA.Compressor
+		Protected Function GetBasicFilterList(Preset As UInt32, FilterID As UInt64 = LZMA.LZMA_FILTER_LZMA2) As LZMA.FilterList
+		  Dim filters As New FilterList
+		  #If TargetX86 Then
+		    filters.Append(LZMA_FILTER_X86, Nil)
+		  #Else
+		    Raise New PlatformNotSupportedException
+		  #endif
+		  filters.Append(FilterID, GetPresetOptions(Preset))
+		  Return filters
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType) As LZMA.Compressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
-		    Return New LZMA.Codecs.XZEncoder(Preset, Filters, Checksum)
+		    Return New LZMA.Codecs.XZEncoder(Preset, Nil, Checksum)
 		  Case LZMA.Codec.lzma1
 		    Return New LZMA.Codecs.LZMAEncoder(Preset)
-		  Case LZMA.Codec.Raw
-		    Return New LZMA.Codecs.RawEncoder(Filters)
 		  Else
 		    If Preset > 9 Then Preset = 9 Or LZMA_PRESET_EXTREME
 		    Return New LZMA.Codecs.BasicEncoder(Preset, Checksum)
@@ -78,14 +89,12 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function GetDecompressor(Codec As LZMA.Codec, MemoryLimit As UInt64, Flags As UInt32, Optional Filters As LZMA.FilterList) As LZMA.Decompressor
+		Protected Function GetDecompressor(Codec As LZMA.Codec, MemoryLimit As UInt64, Flags As UInt32) As LZMA.Decompressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
 		    Return New LZMA.Codecs.XZDecoder(MemoryLimit, Flags)
 		  Case LZMA.Codec.lzma1
 		    Return New LZMA.Codecs.LZMADecoder(MemoryLimit)
-		  Case LZMA.Codec.Raw
-		    Return New LZMA.Codecs.RawDecoder(Filters)
 		  Else
 		    Return New LZMA.Codecs.BasicDecoder(MemoryLimit, Flags)
 		  End Select
@@ -100,19 +109,6 @@ Protected Module LZMA
 		    Raise New LZMAException(ErrorCodes.ProgError)
 		  End If
 		  Return opts
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function GetStandardFilterList(Preset As UInt32) As LZMA.FilterList
-		  Dim filters As New FilterList
-		  #If TargetX86 Then
-		    filters.AppendFilter(LZMA_FILTER_X86, Nil)
-		  #Else
-		    Raise New PlatformNotSupportedException
-		  #endif
-		  filters.AppendFilter(LZMA_FILTER_LZMA2, GetPresetOptions(Preset))
-		  Return filters
 		End Function
 	#tag EndMethod
 
@@ -378,6 +374,9 @@ Protected Module LZMA
 	#tag Constant, Name = LZMA_FILTER_ARMTHUMB, Type = Double, Dynamic = False, Default = \"&h08", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = LZMA_FILTER_DELTA, Type = Double, Dynamic = False, Default = \"&h03", Scope = Protected
+	#tag EndConstant
+
 	#tag Constant, Name = LZMA_FILTER_IA64, Type = Double, Dynamic = False, Default = \"&h06", Scope = Protected
 	#tag EndConstant
 
@@ -466,7 +465,7 @@ Protected Module LZMA
 		  PositionBitCount As UInt32
 		  Mode As LZMAMode
 		  NiceLength As UInt32
-		  MatchFinder As LZMAMatchFinder
+		  MatchFinder As MatchFinder
 		  Depth As UInt32
 		  Reserved1 As UInt32
 		  Reserved2 As UInt32
@@ -516,9 +515,8 @@ Protected Module LZMA
 	#tag Enum, Name = Codec, Type = Integer, Flags = &h1
 		XZ
 		  lzma1
-		  Raw
-		  Block
-		Detect
+		  Detect
+		lzma2=Codec.XZ
 	#tag EndEnum
 
 	#tag Enum, Name = EncodeAction, Flags = &h1
@@ -544,17 +542,17 @@ Protected Module LZMA
 		ProgError=11
 	#tag EndEnum
 
-	#tag Enum, Name = LZMAMatchFinder, Type = Integer, Flags = &h1
+	#tag Enum, Name = LZMAMode, Type = Integer, Flags = &h1
+		Fast=1
+		Normal=2
+	#tag EndEnum
+
+	#tag Enum, Name = MatchFinder, Flags = &h1
 		MF_HC3 = &h03
 		  MF_HC4=&h04
 		  MF_BT2=&h12
 		  MF_BT3=&h13
 		MF_BT4=&h14
-	#tag EndEnum
-
-	#tag Enum, Name = LZMAMode, Type = Integer, Flags = &h1
-		Fast=1
-		Normal=2
 	#tag EndEnum
 
 

@@ -15,21 +15,6 @@ Protected Class LZMAEngine
 	#tag Method, Flags = &h1
 		Protected Sub Constructor()
 		  If Not LZMA.IsAvailable() Then Raise New PlatformNotSupportedException
-		  mStream.InternalState = 0
-		  mStream.AvailIn = 0
-		  mStream.AvailOut = 0
-		  mStream.NextIn = Nil
-		  mStream.NextOut = Nil
-		  mStream.Reserved1 = Nil
-		  mStream.Reserved2 = Nil
-		  mStream.Reserved3 = Nil
-		  mStream.Reserved4 = Nil
-		  mStream.Reserved5 = 0
-		  mStream.Reserved6 = 0
-		  mStream.Reserved7 = 0
-		  mStream.Reserved8 = 0
-		  mStream.Reserved9 = 0
-		  mStream.Reserved10 = 0
 		End Sub
 	#tag EndMethod
 
@@ -105,10 +90,6 @@ Protected Class LZMAEngine
 		End Function
 	#tag EndMethod
 
-
-	#tag ComputedProperty, Flags = &h0
-		LastError As ErrorCodes
-	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter

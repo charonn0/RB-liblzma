@@ -1,7 +1,7 @@
 #tag Class
 Protected Class FilterList
 	#tag Method, Flags = &h0
-		Sub AppendFilter(FilterID As UInt64, Options As MemoryBlock)
+		Sub Append(FilterID As UInt64, Options As MemoryBlock)
 		  If Count >= 4 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  Dim filter As lzma_filter
 		  filter.ID = FilterID
@@ -18,19 +18,19 @@ Protected Class FilterList
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetFilterID(Index As Integer) As UInt64
+		Function FilterID(Index As Integer) As UInt64
 		  Return mFilters(Index).ID
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetFilterOptions(Index As Integer) As MemoryBlock
-		  Return mFilters(Index).Options
-		End Function
+		Sub FilterID(Index As Integer, Assigns NewFilter As UInt64)
+		  mFilters(Index).ID = NewFilter
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub InsertFilter(Index As Integer, FilterID As UInt64, Options As MemoryBlock)
+		Sub Insert(Index As Integer, FilterID As UInt64, Options As MemoryBlock)
 		  If Count >= 3 Or Index > Count - 1 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  Dim filter As lzma_filter
 		  filter.ID = FilterID
@@ -64,7 +64,19 @@ Protected Class FilterList
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub RemoveFilter(Index As Integer)
+		Function Options(Index As Integer) As MemoryBlock
+		  Return mFilters(Index).Options
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Options(Index As Integer, Assigns NewOpts As MemoryBlock)
+		  mFilters(Index).Options = NewOpts
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Remove(Index As Integer)
 		  mFilters.Remove(Index)
 		  mOptRefs.Remove(Index)
 		End Sub

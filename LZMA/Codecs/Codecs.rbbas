@@ -1,5 +1,5 @@
 #tag Module
-Private Module Codecs
+Protected Module Codecs
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

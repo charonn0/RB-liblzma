@@ -7,18 +7,6 @@ Protected Interface Decompressor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function AvailOut() As UInt32
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function IsOpen() As Boolean
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function LastError() As LZMA.ErrorCodes
 		  
 		End Function

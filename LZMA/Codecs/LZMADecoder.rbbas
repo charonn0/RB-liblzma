@@ -11,14 +11,8 @@ Implements LZMA.Decompressor
 		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
 		  mLastError = lzma_alone_decoder(mStream, MemoryLimit)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
-		  mMemoryLimit = MemoryLimit
 		End Sub
 	#tag EndMethod
-
-
-	#tag Property, Flags = &h21
-		Private mMemoryLimit As UInt64
-	#tag EndProperty
 
 
 	#tag ViewBehavior
