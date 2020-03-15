@@ -469,7 +469,7 @@ Protected Module LZMA
 		  PositionBitCount As UInt32
 		  Mode As LZMAMode
 		  NiceLength As UInt32
-		  MatchFinder As LZMAMatchFinder
+		  MatchFinder As MatchFinder
 		  Depth As UInt32
 		  Reserved1 As UInt32
 		  Reserved2 As UInt32
@@ -519,9 +519,8 @@ Protected Module LZMA
 	#tag Enum, Name = Codec, Type = Integer, Flags = &h1
 		XZ
 		  lzma1
-		  Raw
-		  Block
-		Detect
+		  Detect
+		lzma2=Codec.XZ
 	#tag EndEnum
 
 	#tag Enum, Name = EncodeAction, Flags = &h1
@@ -547,17 +546,17 @@ Protected Module LZMA
 		ProgError=11
 	#tag EndEnum
 
-	#tag Enum, Name = LZMAMatchFinder, Type = Integer, Flags = &h1
+	#tag Enum, Name = LZMAMode, Type = Integer, Flags = &h1
+		Fast=1
+		Normal=2
+	#tag EndEnum
+
+	#tag Enum, Name = MatchFinder, Flags = &h1
 		MF_HC3 = &h03
 		  MF_HC4=&h04
 		  MF_BT2=&h12
 		  MF_BT3=&h13
 		MF_BT4=&h14
-	#tag EndEnum
-
-	#tag Enum, Name = LZMAMode, Type = Integer, Flags = &h1
-		Fast=1
-		Normal=2
 	#tag EndEnum
 
 
