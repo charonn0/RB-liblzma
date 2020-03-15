@@ -12,11 +12,6 @@ Implements LZMA.Compressor
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h21
-		Private mOptions As lzma_options_lzma
-	#tag EndProperty
-
-
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"
