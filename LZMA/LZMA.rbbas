@@ -55,9 +55,28 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function DecodeUInt64(ByRef VLI As UInt64, EncodedForm As MemoryBlock) As ErrorCodes
+		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
+		  Dim VLIPosition, BufferPosition As UInt32
+		  Return lzma_vli_decode(VLI, VLIPosition, EncodedForm, BufferPosition, EncodedForm.Size)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function EncoderMemoryUse(Preset As UInt32) As UInt64
 		  If Not IsAvailable Then Return 0
 		  Return lzma_easy_encoder_memusage(Preset)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function EncodeUInt64(VLI As UInt64, ByRef Buffer As MemoryBlock) As ErrorCodes
+		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
+		  Dim sz As UInt32 = lzma_vli_size(VLI)
+		  If sz < 1 Then Raise New LZMAException(ErrorCodes.ProgError)
+		  Dim VLIPosition, BufferPosition As UInt32
+		  Buffer = New MemoryBlock(sz)
+		  Return lzma_vli_encode(VLI, VLIPosition, Buffer, BufferPosition, Buffer.Size)
 		End Function
 	#tag EndMethod
 
@@ -249,6 +268,18 @@ Protected Module LZMA
 
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_version_string Lib LIB_LZMA () As CString
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_vli_decode Lib LIB_LZMA (Byref VLI As UInt64, ByRef VLIPosition As UInt32, Buffer As Ptr, ByRef BufferPosition As UInt32, BufferSize As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_vli_encode Lib LIB_LZMA (VLI As UInt64, ByRef VLIPosition As UInt32, Buffer As Ptr, ByRef BufferPosition As UInt32, BufferSize As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_vli_size Lib LIB_LZMA (VLI As UInt64) As UInt32
 	#tag EndExternalMethod
 
 	#tag Method, Flags = &h1
