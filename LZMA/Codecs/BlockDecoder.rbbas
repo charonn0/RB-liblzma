@@ -3,7 +3,7 @@ Protected Class BlockDecoder
 Inherits LZMA.LZMAEngine
 Implements LZMA.Decompressor
 	#tag Method, Flags = &h0
-		Sub Constructor(ChecksumType As LZMA.ChecksumType, CompressedSize As UInt64)
+		Sub Constructor(Filters As LZMA.FilterList, ChecksumType As LZMA.ChecksumType, CompressedSize As UInt64)
 		  ' Constructs a block decoder.
 		  ' Checksum is the type of Checksum used
 		  ' CompressedSize is the actual compressed size of the data
@@ -13,14 +13,26 @@ Implements LZMA.Decompressor
 		  mBlock.HeaderSize = LZMA_BLOCK_HEADER_SIZE_MIN
 		  mBlock.Check = ChecksumType
 		  mBlock.CompressedSize = CompressedSize
+		  mBlock.UncompressedSize = UINT64_MAX
+		  mFilterPtr = Filters
+		  mBlock.Filters = mFilterPtr
 		  mLastError = lzma_block_decoder(mStream, mBlock)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		  mFilters = Filters
 		End Sub
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h1
-		Protected mBlock As lzma_block
+	#tag Property, Flags = &h21
+		Private mBlock As lzma_block
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mFilterPtr As MemoryBlock
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mFilters As FilterList
 	#tag EndProperty
 
 
