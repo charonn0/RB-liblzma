@@ -8,7 +8,7 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function CRC32(Data As MemoryBlock, LastCRC As UInt32 = 0, DataSize As Integer = - 1) As UInt32
+		Protected Function CRC32(Data As MemoryBlock, LastCRC As UInt32 = 0, DataSize As UInt32 = 0) As UInt32
 		  ' Calculate the CRC32 checksum for the Data. Pass back the returned value
 		  ' to continue processing.
 		  '    Dim crc As UInt32
@@ -21,14 +21,14 @@ Protected Module LZMA
 		  If Not avail Then avail = IsAvailable()
 		  If Not avail Or Data = Nil Then Return 0
 		  
-		  If DataSize = -1 Then DataSize = Data.Size
+		  If DataSize = 0 Then DataSize = Data.Size
 		  Return lzma_crc32(Data, DataSize, LastCRC)
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function CRC64(Data As MemoryBlock, LastCRC As UInt64 = 0, DataSize As Integer = - 1) As UInt64
+		Protected Function CRC64(Data As MemoryBlock, LastCRC As UInt64 = 0, DataSize As UInt32 = 0) As UInt64
 		  ' Calculate the CRC64 checksum for the Data. Pass back the returned value
 		  ' to continue processing.
 		  '    Dim crc As UInt64
@@ -41,7 +41,7 @@ Protected Module LZMA
 		  If Not avail Then avail = IsAvailable()
 		  If Not avail Or Data = Nil Then Return 0
 		  
-		  If DataSize = -1 Then DataSize = Data.Size
+		  If DataSize = 0 Then DataSize = Data.Size
 		  Return lzma_crc64(Data, DataSize, LastCRC)
 		  
 		End Function
@@ -58,19 +58,6 @@ Protected Module LZMA
 		Protected Function EncoderMemoryUse(Preset As UInt32) As UInt64
 		  If Not IsAvailable Then Return 0
 		  Return lzma_easy_encoder_memusage(Preset)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function GetBasicFilterList(Preset As UInt32, FilterID As UInt64 = LZMA.LZMA_FILTER_LZMA2) As LZMA.FilterList
-		  Dim filters As New FilterList
-		  #If TargetX86 Then
-		    filters.Append(LZMA_FILTER_X86, Nil)
-		  #Else
-		    Raise New PlatformNotSupportedException
-		  #endif
-		  filters.Append(FilterID, GetPresetOptions(Preset))
-		  Return filters
 		End Function
 	#tag EndMethod
 
@@ -181,26 +168,6 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_alone_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, MemLimit As UInt64) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_alone_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Options As Ptr) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_auto_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, MemLimit As UInt64, Flags As UInt32) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_block_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, ByRef Block As lzma_block) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_block_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, ByRef Block As lzma_block) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_check_is_supported Lib LIB_LZMA (CheckType As ChecksumType) As Boolean
 	#tag EndExternalMethod
 
@@ -226,10 +193,6 @@ Protected Module LZMA
 
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_easy_decoder_memusage Lib LIB_LZMA (Preset As UInt32) As UInt64
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_easy_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Preset As UInt32, Check As ChecksumType) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -273,35 +236,11 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_properties_decode Lib LIB_LZMA (Filter As Ptr, Allocator As Ptr, Props As Ptr, PropsSize As UInt32) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_properties_encode Lib LIB_LZMA (Filter As Ptr, ByRef Props As UInt8) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_properties_size Lib LIB_LZMA (ByRef Size As UInt32, Filter As Ptr) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_raw_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_raw_decoder_memusage Lib LIB_LZMA (Filters As Ptr) As UInt64
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_raw_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_stream_decoder Lib LIB_LZMA (ByRef Stream As lzma_stream, MemoryLimit As UInt64, Flags As UInt32) As ErrorCodes
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_stream_encoder Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr, Check As ChecksumType) As ErrorCodes
+		Private Soft Declare Function lzma_raw_encoder_memusage Lib LIB_LZMA (Filters As Ptr) As UInt64
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
