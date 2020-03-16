@@ -10,7 +10,8 @@ Implements LZMA.Compressor
 		  Super.Constructor()
 		  mBlock.Version = 1
 		  mBlock.Check = ChecksumType
-		  mBlock.Filters = Filters
+		  mFilterPtr = Filters
+		  mBlock.Filters = mFilterPtr
 		  mLastError = lzma_block_encoder(mStream, mBlock)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		  mFilters = Filters
@@ -20,6 +21,10 @@ Implements LZMA.Compressor
 
 	#tag Property, Flags = &h21
 		Private mBlock As lzma_block
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mFilterPtr As MemoryBlock
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
