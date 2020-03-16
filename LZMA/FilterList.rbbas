@@ -12,6 +12,25 @@ Protected Class FilterList
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Constructor(Preset As UInt32 = 0, FilterID As UInt64 = LZMA.LZMA_FILTER_LZMA2)
+		  ' Constructs a basic filter list. If Preset is specified then the list is
+		  ' prepopulated for LZMA1 or LZMA2, as indicated by the FilterID parameter.
+		  
+		  If Preset > 0 Then
+		    #If TargetX86 Then
+		      Me.Append(LZMA_FILTER_X86, Nil)
+		    #ElseIf Target64Bit
+		      Me.Append(LZMA_FILTER_IA64, Nil)
+		    #Else
+		      Raise New PlatformNotSupportedException
+		    #endif
+		    Me.Append(FilterID, GetPresetOptions(Preset))
+		  End If
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Count() As Integer
 		  Return UBound(mFilters) + 1
 		End Function
@@ -60,6 +79,13 @@ Protected Class FilterList
 		  lst.UInt64Value(index * lzma_filter.Size) = LZMA_VLI_UNKNOWN
 		  
 		  Return lst
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Operator_Subscript(Index As Integer) As lzma_options_lzma
+		  Dim p As Ptr = Me.Options(Index)
+		  Return p.lzma_options_lzma
 		End Function
 	#tag EndMethod
 
