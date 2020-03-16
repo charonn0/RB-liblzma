@@ -33,8 +33,8 @@ Implements LZMA.Compressor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function MemoryUse() As UInt64
+	#tag Method, Flags = &h1
+		Protected Function MemoryUse_() As UInt64
 		  If IsOpen Then Return lzma_raw_encoder_memusage(mFilters)
 		End Function
 	#tag EndMethod

@@ -37,8 +37,8 @@ Protected Class LZMAEngine
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function MemoryUse() As UInt64
+	#tag Method, Flags = &h1
+		Protected Function MemoryUse_() As UInt64
 		  If IsOpen Then Return lzma_memusage(mStream)
 		End Function
 	#tag EndMethod
@@ -109,6 +109,15 @@ Protected Class LZMAEngine
 			End Set
 		#tag EndSetter
 		MemoryLimit As UInt64
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return Me.MemoryUse_()
+			End Get
+		#tag EndGetter
+		MemoryUse As UInt64
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h1
