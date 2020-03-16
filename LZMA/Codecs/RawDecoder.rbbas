@@ -8,7 +8,7 @@ Implements LZMA.Decompressor
 		  
 		  Super.Constructor()
 		  
-		  Filters.lzma_options_lzma(1).DictionarySize = _
+		  Filters(1).DictionarySize = _
 		  (Header.UInt8Value(5) And &hFF) Or _
 		  (ShiftLeft(Header.UInt8Value(6) And &hFF, 8)) Or _
 		  (ShiftLeft(Header.UInt8Value(7) And &hFF, 16)) Or _
