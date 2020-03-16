@@ -109,15 +109,6 @@ Protected Class FilterList
 	#tag EndMethod
 
 
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  If LZMA.IsAvailable Then Return lzma_raw_decoder_memusage(Me)
-			End Get
-		#tag EndGetter
-		MemoryUse As UInt64
-	#tag EndComputedProperty
-
 	#tag Property, Flags = &h21
 		Private mFilters() As lzma_filter
 	#tag EndProperty

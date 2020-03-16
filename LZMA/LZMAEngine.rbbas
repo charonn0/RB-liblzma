@@ -38,6 +38,12 @@ Protected Class LZMAEngine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function MemoryUse() As UInt64
+		  If IsOpen Then Return lzma_memusage(mStream)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Perform(ReadFrom As Readable, WriteTo As Writeable, Action As LZMA.EncodeAction, ReadCount As Int64) As Boolean
 		  ' Performs encoding/decoding
 		  ' ReadFrom is a Readable object from which input bytes are read.
@@ -103,15 +109,6 @@ Protected Class LZMAEngine
 			End Set
 		#tag EndSetter
 		MemoryLimit As UInt64
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  If IsOpen Then Return lzma_memusage(mStream)
-			End Get
-		#tag EndGetter
-		MemoryUse As UInt64
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h1

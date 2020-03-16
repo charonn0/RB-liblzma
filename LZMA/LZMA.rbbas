@@ -240,6 +240,10 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_raw_encoder_memusage Lib LIB_LZMA (Filters As Ptr) As UInt64
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_version_number Lib LIB_LZMA () As UInt32
 	#tag EndExternalMethod
 

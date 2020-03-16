@@ -22,9 +22,20 @@ Implements LZMA.Decompressor
 		  
 		  mLastError = lzma_raw_decoder(mStream, Filters)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
-		  
+		  mFilters = Filters
 		End Sub
 	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function MemoryUse() As UInt64
+		  If IsOpen Then Return lzma_raw_decoder_memusage(mFilters)
+		End Function
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h21
+		Private mFilters As FilterList
+	#tag EndProperty
 
 
 	#tag ViewBehavior
