@@ -8,7 +8,7 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function CRC32(Data As MemoryBlock, LastCRC As UInt32 = 0, DataSize As Integer = - 1) As UInt32
+		Protected Function CRC32(Data As MemoryBlock, LastCRC As UInt32 = 0, DataSize As UInt32 = 0) As UInt32
 		  ' Calculate the CRC32 checksum for the Data. Pass back the returned value
 		  ' to continue processing.
 		  '    Dim crc As UInt32
@@ -21,14 +21,14 @@ Protected Module LZMA
 		  If Not avail Then avail = IsAvailable()
 		  If Not avail Or Data = Nil Then Return 0
 		  
-		  If DataSize = -1 Then DataSize = Data.Size
+		  If DataSize = 0 Then DataSize = Data.Size
 		  Return lzma_crc32(Data, DataSize, LastCRC)
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function CRC64(Data As MemoryBlock, LastCRC As UInt64 = 0, DataSize As Integer = - 1) As UInt64
+		Protected Function CRC64(Data As MemoryBlock, LastCRC As UInt64 = 0, DataSize As UInt32 = 0) As UInt64
 		  ' Calculate the CRC64 checksum for the Data. Pass back the returned value
 		  ' to continue processing.
 		  '    Dim crc As UInt64
@@ -41,7 +41,7 @@ Protected Module LZMA
 		  If Not avail Then avail = IsAvailable()
 		  If Not avail Or Data = Nil Then Return 0
 		  
-		  If DataSize = -1 Then DataSize = Data.Size
+		  If DataSize = 0 Then DataSize = Data.Size
 		  Return lzma_crc64(Data, DataSize, LastCRC)
 		  
 		End Function
