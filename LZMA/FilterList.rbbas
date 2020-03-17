@@ -24,7 +24,7 @@ Protected Class FilterList
 		    #Else
 		      Raise New PlatformNotSupportedException
 		    #endif
-		    Me.Append(FilterID, GetPresetOptions(Preset))
+		    Me.Append(FilterID, New LZMAOptions(Preset))
 		  End If
 		  
 		End Sub

@@ -89,9 +89,9 @@ Protected Module LZMA
 		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType) As LZMA.Compressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
-		    Return New LZMA.Codecs.XZEncoder(Preset, Nil, Checksum)
+		    Return New LZMA.Codecs.XZEncoder(Preset, Nil, Checksum, Nil)
 		  Case LZMA.Codec.lzma1
-		    Return New LZMA.Codecs.LZMAEncoder(Preset)
+		    Return New LZMA.Codecs.LZMAEncoder(Preset, Nil)
 		  Else
 		    If Preset > 9 Then Preset = 9 Or LZMA_PRESET_EXTREME
 		    Return New LZMA.Codecs.BasicEncoder(Preset, Checksum)
@@ -109,17 +109,6 @@ Protected Module LZMA
 		  Else
 		    Return New LZMA.Codecs.BasicDecoder(MemoryLimit, Flags)
 		  End Select
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function GetPresetOptions(Preset As UInt32) As MemoryBlock
-		  If Not LZMA.IsAvailable Then Return Nil
-		  Dim opts As New MemoryBlock(lzma_options_lzma.Size)
-		  If lzma_lzma_preset(opts, Preset) Then ' returns true if the preset is *not* supported
-		    Raise New LZMAException(ErrorCodes.ProgError)
-		  End If
-		  Return opts
 		End Function
 	#tag EndMethod
 
