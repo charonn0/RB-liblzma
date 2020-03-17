@@ -89,7 +89,7 @@ Protected Module LZMA
 		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType) As LZMA.Compressor
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
-		    Return New LZMA.Codecs.XZEncoder(Preset, Nil, Checksum, Nil)
+		    Return New LZMA.Codecs.XZEncoder(Preset, Nil, Checksum)
 		  Case LZMA.Codec.lzma1
 		    Return New LZMA.Codecs.LZMAEncoder(Preset, Nil)
 		  Else

@@ -17,7 +17,7 @@ Implements LZMA.Compressor
 
 
 	#tag Property, Flags = &h21
-		Private mOptions As MemoryBlock
+		Private mOptions As LZMAOptions
 	#tag EndProperty
 
 

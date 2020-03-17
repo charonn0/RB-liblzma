@@ -3,13 +3,13 @@ Protected Class XZEncoder
 Inherits LZMA.LZMAEngine
 Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor(Preset As UInt32, Filters As LZMA.FilterList, Checksum As LZMA.ChecksumType, Options As LZMA.LZMAOptions)
+		Sub Constructor(Preset As UInt32, Filters As LZMA.FilterList, Checksum As LZMA.ChecksumType)
 		  If Filters = Nil Then
 		    ' use default xz Filters
-		    If Options = Nil Then Options = New LZMAOptions(Preset)
-		    Filters = New LZMA.FilterList
+		    mOptions = New LZMAOptions(Preset)
+		    Filters = New FilterList
 		    Filters.Append(LZMA.LZMA_FILTER_X86, Nil)
-		    Filters.Append(LZMA.LZMA_FILTER_LZMA2, options)
+		    Filters.Append(LZMA.LZMA_FILTER_LZMA2, mOptions)
 		  End If
 		  
 		  ' compress using the specified filters
@@ -23,6 +23,10 @@ Implements LZMA.Compressor
 
 	#tag Property, Flags = &h21
 		Private mFilters As FilterList
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mOptions As LZMAOptions
 	#tag EndProperty
 
 
