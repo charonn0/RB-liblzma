@@ -55,10 +55,13 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function DecodeUInt64(ByRef VLI As UInt64, EncodedForm As MemoryBlock) As ErrorCodes
+		Protected Function DecodeUInt64(EncodedForm As MemoryBlock) As UInt64
 		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
 		  Dim VLIPosition, BufferPosition As UInt32
-		  Return lzma_vli_decode(VLI, VLIPosition, EncodedForm, BufferPosition, EncodedForm.Size)
+		  Dim VLI As UInt64
+		  Dim err As ErrorCodes = lzma_vli_decode(VLI, VLIPosition, EncodedForm, BufferPosition, EncodedForm.Size)
+		  If err <> ErrorCodes.StreamEnd Then Raise New LZMAException(err)
+		  Return VLI
 		End Function
 	#tag EndMethod
 
@@ -70,13 +73,15 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function EncodeUInt64(VLI As UInt64, ByRef Buffer As MemoryBlock) As ErrorCodes
+		Protected Function EncodeUInt64(VLI As UInt64) As MemoryBlock
 		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
 		  Dim sz As UInt32 = lzma_vli_size(VLI)
 		  If sz < 1 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  Dim VLIPosition, BufferPosition As UInt32
-		  Buffer = New MemoryBlock(sz)
-		  Return lzma_vli_encode(VLI, VLIPosition, Buffer, BufferPosition, Buffer.Size)
+		  Dim buffer As New MemoryBlock(sz)
+		  Dim err As ErrorCodes = lzma_vli_encode(VLI, VLIPosition, Buffer, BufferPosition, Buffer.Size)
+		  If err <> ErrorCodes.StreamEnd Then Raise New LZMAException(err)
+		  Return buffer
 		End Function
 	#tag EndMethod
 
