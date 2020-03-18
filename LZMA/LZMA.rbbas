@@ -250,6 +250,46 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_buffer_bound Lib LIB_LZMA (UncompressedSize As UInt32) As UInt32
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_buffer_decode Lib LIB_LZMA (ByRef Block As lzma_block, Allocator As Ptr, Input As Ptr, ByRef InputSize As UInt32, InputSize As UInt32, Output As Ptr, ByRef OutputPosition As UInt32, OutputSize As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_buffer_encode Lib LIB_LZMA (ByRef Block As lzma_block, Allocator As Ptr, Input As Ptr, InputSize As UInt32, Output As Ptr, ByRef OutputPosition As UInt32, OutputSize As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_compressed_size Lib LIB_LZMA (ByRef Block As lzma_block, UnpaddedSize As UInt64) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_header_decode Lib LIB_LZMA (ByRef Block As lzma_block, Allocator As Ptr, Input As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_header_encode Lib LIB_LZMA (Block As lzma_block, Output As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_header_size Lib LIB_LZMA (ByRef Block As lzma_block) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_total_size Lib LIB_LZMA (Block As lzma_block) As UInt64
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_uncomp_encode Lib LIB_LZMA (ByRef Block As lzma_block, Input As Ptr, InputSize As UInt32, Output As Ptr, ByRef OutputPosition As UInt32, OutputSize As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_block_unpadded_size Lib LIB_LZMA (Block As lzma_block) As UInt64
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_check_is_supported Lib LIB_LZMA (CheckType As ChecksumType) As Boolean
 	#tag EndExternalMethod
 
@@ -302,6 +342,18 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_filter_flags_decode Lib LIB_LZMA (Filters As Ptr, Allocator As Ptr, Input As Ptr, ByRef InputPosition As UInt32, InputSize As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_filter_flags_encode Lib LIB_LZMA (Filters As Ptr, Output As Ptr, ByRef OutputPosition As UInt32, OutputSize As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_filter_flags_size Lib LIB_LZMA (ByRef Size As UInt32, Filters As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_get_check Lib LIB_LZMA (ByRef Stream As lzma_stream) As ChecksumType
 	#tag EndExternalMethod
 
@@ -351,6 +403,22 @@ Protected Module LZMA
 
 	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_stream_buffer_encode Lib LIB_LZMA (FilterList As Ptr, Check As ChecksumType, Allocator As Ptr, Input As Ptr, InputSize As UInt32, Output As Ptr, ByRef OutputPosition As UInt32, OutputSize As UInt32) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_stream_flags_compare Lib LIB_LZMA (LValue As lzma_stream_flags, RValue As lzma_stream_flags) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_stream_footer_decode Lib LIB_LZMA (ByRef Options As lzma_stream_flags, Input As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_stream_footer_encode Lib LIB_LZMA (Options As lzma_stream_flags, Output As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_stream_header_decode Lib LIB_LZMA (ByRef Options As lzma_stream_flags, Input As Ptr) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
@@ -586,6 +654,26 @@ Protected Module LZMA
 		  Reserved8 As Integer
 		  Reserved9 As Integer
 		Reserved10 As Integer
+	#tag EndStructure
+
+	#tag Structure, Name = lzma_stream_flags, Flags = &h21, Attributes = \"StructureAlignment \x3D 8"
+		Version As UInt32
+		  BackwardSize As UInt64
+		  Check As ChecksumType
+		  Reserved1 As UInt32
+		  Reserved2 As UInt32
+		  Reserved3 As UInt32
+		  Reserved4 As UInt32
+		  Reserved5 As Boolean
+		  Reserved6 As Boolean
+		  Reserved7 As Boolean
+		  Reserved8 As Boolean
+		  Reserved9 As Boolean
+		  Reserved10 As Boolean
+		  Reserved11 As Boolean
+		  Reserved12 As Boolean
+		  Reserved13 As UInt32
+		Reserved14 As UInt32
 	#tag EndStructure
 
 
