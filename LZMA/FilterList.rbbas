@@ -60,6 +60,18 @@ Protected Class FilterList
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		 Shared Function IsDecoderSupported(FilterID As UInt64) As Boolean
+		  Return LZMA.IsAvailable And lzma_filter_decoder_is_supported(FilterID)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function IsEncoderSupported(FilterID As UInt64) As Boolean
+		  Return LZMA.IsAvailable And lzma_filter_encoder_is_supported(FilterID)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Operator_Convert() As Ptr
 		  Dim count As Integer = UBound(mFilters)
 		  If count > 4 Then Raise New LZMAException(ErrorCodes.ProgError)
