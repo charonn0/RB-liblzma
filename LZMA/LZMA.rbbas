@@ -229,6 +229,10 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_get_check Lib LIB_LZMA (ByRef Stream As lzma_stream) As ChecksumType
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_lzma_preset Lib LIB_LZMA (Options As Ptr, Preset As UInt32) As Boolean
 	#tag EndExternalMethod
 
