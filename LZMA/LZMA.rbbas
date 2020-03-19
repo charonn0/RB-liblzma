@@ -254,7 +254,7 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
-		Private Soft Declare Function lzma_block_buffer_decode Lib LIB_LZMA (ByRef Block As lzma_block, Allocator As Ptr, Input As Ptr, ByRef InputSize As UInt32, InputSize As UInt32, Output As Ptr, ByRef OutputPosition As UInt32, OutputSize As UInt32) As ErrorCodes
+		Private Soft Declare Function lzma_block_buffer_decode Lib LIB_LZMA (ByRef Block As lzma_block, Allocator As Ptr, Input As Ptr, ByRef InputPosition As UInt32, InputSize As UInt32, Output As Ptr, ByRef OutputPosition As UInt32, OutputSize As UInt32) As ErrorCodes
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
