@@ -426,6 +426,10 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_stream_header_encode Lib LIB_LZMA (Options As lzma_stream_flags, Output As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_version_number Lib LIB_LZMA () As UInt32
 	#tag EndExternalMethod
 
@@ -564,6 +568,9 @@ Protected Module LZMA
 	#tag EndConstant
 
 	#tag Constant, Name = LZMA_PRESET_EXTREME, Type = Double, Dynamic = False, Default = \"&h80000000", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = LZMA_STREAM_HEADER_SIZE, Type = Double, Dynamic = False, Default = \"12", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = LZMA_TELL_ANY_CHECK, Type = Double, Dynamic = False, Default = \"&h04", Scope = Protected
