@@ -330,6 +330,10 @@ Protected Module LZMA
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function lzma_filters_copy Lib LIB_LZMA (Source As Ptr, Destination As Ptr, Allocator As Ptr) As ErrorCodes
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h21
 		Private Soft Declare Function lzma_filters_update Lib LIB_LZMA (ByRef Stream As lzma_stream, Filters As Ptr) As ErrorCodes
 	#tag EndExternalMethod
 
