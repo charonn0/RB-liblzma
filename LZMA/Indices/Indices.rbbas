@@ -1,7 +1,28 @@
 #tag Module
 Protected Module Indices
 	#tag Method, Flags = &h1
-		Protected Function DecodeIndex(Index As MemoryBlock, MemoryLimit As UInt64) As LZMA.Indices.LZMAIndex
+		Protected Function DecodeIndex(XZFile As FolderItem, MemoryLimit As UInt64 = 0) As LZMA.Indices.LZMAIndex
+		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
+		  Dim engine As IndexDecoder
+		  Dim rawstream As BinaryStream
+		  Try
+		    rawstream = BinaryStream.Open(XZFile)
+		    'rawstream.LittleEndian = True
+		    Dim size As UInt32
+		    If LocateIndex(rawstream, size) Then
+		      engine = New IndexDecoder(MemoryLimit)
+		      Call engine.Perform(rawstream, Nil, EncodeAction.Run, size)
+		    End If
+		  Finally
+		    If rawstream <> Nil Then rawstream.Close
+		  End Try
+		  If engine <> Nil Then Return engine.Result
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function DecodeIndex(Index As MemoryBlock, MemoryLimit As UInt64 = 0) As LZMA.Indices.LZMAIndex
+		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
 		  Dim buffer As Ptr
 		  Dim pos As UInt32
 		  Dim err As ErrorCodes = lzma_index_buffer_decode(buffer, MemoryLimit, Nil, Index, pos, Index.Size)
@@ -15,6 +36,29 @@ Protected Module Indices
 		  Dim out As UInt32
 		  Dim err As ErrorCodes = lzma_index_buffer_encode(Index, buffer, out, buffer.Size)
 		  If err = ErrorCodes.OK Then Return buffer
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function LocateIndex(RawStream As BinaryStream, ByRef IndexSize As UInt32) As Boolean
+		  RawStream.LittleEndian = True
+		  Dim old As UInt64 = RawStream.Position
+		  RawStream.Position = RawStream.Length - 12
+		  Dim crc As UInt32 = RawStream.ReadUInt32()
+		  Dim check As MemoryBlock = RawStream.Read(6)
+		  IndexSize = (check.UInt32Value(0) + 1 ) * 4
+		  Dim flags As UInt16
+		  flags = check.UInt16Value(4)
+		  Dim magic As String = RawStream.Read(2)
+		  
+		  If magic = "YZ" And CRC32(check) = crc Then
+		    RawStream.Position = RawStream.Length - 12 - IndexSize
+		    Return True
+		  Else
+		    RawStream.Position = old
+		    Return False
+		  End If
+		  
 		End Function
 	#tag EndMethod
 
