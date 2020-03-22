@@ -6,6 +6,7 @@ Implements Decompressor
 		Sub Constructor(MemoryLimit As UInt64)
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor()
+		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
 		  mLastError = lzma_index_decoder(mStream, mIndex, MemoryLimit)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		End Sub
