@@ -5,9 +5,32 @@ Protected Class FilterList
 		  If Count >= 4 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  Dim filter As lzma_filter
 		  filter.ID = FilterID
-		  If Options <> Nil Then filter.Options = Options
+		  If Options <> Nil Then
+		    filter.Options = Options
+		  End If
 		  mFilters.Append(filter)
 		  mOptRefs.Append(Options)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Constructor(CopyFrom As LZMA.FilterList)
+		  ' Constructs a filter list by copying the CopyFrom parameter. 
+		  
+		  Dim copyto As New MemoryBlock((CopyFrom.mFilters.Ubound + 2) * lzma_filter.Size)
+		  Dim err As ErrorCodes = lzma_filters_copy(CopyFrom, copyto, Nil)
+		  If err <> ErrorCodes.OK Then Raise New LZMAException(err)
+		  
+		  Dim count As Integer = copyto.Size / lzma_filter.Size
+		  Dim index As Integer
+		  For index = 0 To count - 2
+		    Dim id As UInt64 = copyto.UInt64Value(index * lzma_filter.Size)
+		    Dim options As MemoryBlock = copyto.Ptr(index * lzma_filter.Size + 8)
+		    Dim opt As LZMAOptions
+		    If options <> Nil Then opt = New LZMAOptions(options)
+		    Me.Append(id, opt)
+		  Next
+		  mRef = copyto
 		End Sub
 	#tag EndMethod
 
@@ -128,6 +151,10 @@ Protected Class FilterList
 
 	#tag Property, Flags = &h21
 		Private mOptRefs() As LZMAOptions
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mRef As MemoryBlock
 	#tag EndProperty
 
 
