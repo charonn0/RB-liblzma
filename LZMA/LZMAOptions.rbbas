@@ -1,6 +1,12 @@
 #tag Class
 Protected Class LZMAOptions
 	#tag Method, Flags = &h0
+		Sub Constructor(FromData As MemoryBlock)
+		  mOptions = FromData
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Constructor(Preset As UInt32)
 		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
 		  mOptions = New MemoryBlock(lzma_options_lzma.Size)
