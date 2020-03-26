@@ -7,18 +7,20 @@ Implements LZMA.Decompressor
 		  ' Constructs a decoder for raw LZMA
 		  
 		  Super.Constructor()
-		  
-		  Filters(1).DictionarySize = _
-		  (Header.UInt8Value(5) And &hFF) Or _
-		  (ShiftLeft(Header.UInt8Value(6) And &hFF, 8)) Or _
-		  (ShiftLeft(Header.UInt8Value(7) And &hFF, 16)) Or _
-		  (ShiftLeft(Header.UInt8Value(8) And &hFF, 24))
-		  
-		  Dim props As New MemoryBlock(1)
-		  props.UInt8Value(0) = Header.UInt8Value(4)
-		  
-		  mLastError = lzma_properties_decode(Filters, Nil, props, 4)
-		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+
+		  If Header <> Nil And Header.Size > 0 Then
+		    Filters(1).DictionarySize = _
+		    (Header.UInt8Value(5) And &hFF) Or _
+		    (ShiftLeft(Header.UInt8Value(6) And &hFF, 8)) Or _
+		    (ShiftLeft(Header.UInt8Value(7) And &hFF, 16)) Or _
+		    (ShiftLeft(Header.UInt8Value(8) And &hFF, 24))
+		    
+		    Dim props As New MemoryBlock(1)
+		    props.UInt8Value(0) = Header.UInt8Value(4)
+		    
+		    mLastError = lzma_properties_decode(Filters, Nil, props, 4)
+		    If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		  End If
 		  
 		  mLastError = lzma_raw_decoder(mStream, Filters)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
@@ -26,8 +28,8 @@ Implements LZMA.Decompressor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function MemoryUse() As UInt64
+	#tag Method, Flags = &h1
+		Protected Function MemoryUse_() As UInt64
 		  If IsOpen Then Return lzma_raw_decoder_memusage(mFilters)
 		End Function
 	#tag EndMethod

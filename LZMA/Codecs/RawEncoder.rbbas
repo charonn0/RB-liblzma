@@ -5,7 +5,27 @@ Implements LZMA.Compressor
 	#tag Method, Flags = &h0
 		Sub Constructor(Filters As LZMA.FilterList)
 		  Super.Constructor()
+		  Dim propsz As UInt32
+		  mLastError = lzma_properties_size(propsz, Filters)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		  
+		  If propsz > 0 Then
+		    Dim prop As UInt8
+		    mLastError = lzma_properties_encode(Filters, prop)
+		    If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
+		    mHeader = New MemoryBlock(9)
+		    mHeader.UInt8Value(0) = &h13
+		    mHeader.UInt8Value(1) = 0
+		    mHeader.UInt8Value(2) = 5
+		    mHeader.UInt8Value(3) = 0
+		    mHeader.UInt8Value(4) = prop
+		    For i As Integer = 0 To Filters.Count - 1
+		      If Filters.Options(i) <> Nil Then
+		        mHeader.UInt32Value(5) = Filters(i).DictionarySize
+		        Exit For
+		      End If
+		    Next
+		  End If
 		  
 		  mLastError = lzma_raw_encoder(mStream, filters)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
@@ -13,8 +33,8 @@ Implements LZMA.Compressor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function MemoryUse() As UInt64
+	#tag Method, Flags = &h1
+		Protected Function MemoryUse_() As UInt64
 		  If IsOpen Then Return lzma_raw_encoder_memusage(mFilters)
 		End Function
 	#tag EndMethod

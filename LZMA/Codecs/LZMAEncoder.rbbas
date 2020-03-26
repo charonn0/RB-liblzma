@@ -3,11 +3,12 @@ Protected Class LZMAEncoder
 Inherits LZMA.LZMAEngine
 Implements LZMA.Compressor
 	#tag Method, Flags = &h0
-		Sub Constructor(Preset As UInt32)
+		Sub Constructor(Preset As UInt32, Options As LZMA.LZMAOptions)
 		  ' Constructs an encoder for the original LZMA1 algorithm.
 		  
 		  Super.Constructor()
-		  mOptions = GetPresetOptions(Preset)
+		  If Options = Nil Then Options = New LZMAOptions(Preset)
+		  mOptions = Options
 		  mLastError = lzma_alone_encoder(mStream, mOptions)
 		  If mLastError <> ErrorCodes.OK Then Raise New LZMAException(mLastError)
 		  
@@ -16,7 +17,7 @@ Implements LZMA.Compressor
 
 
 	#tag Property, Flags = &h21
-		Private mOptions As MemoryBlock
+		Private mOptions As LZMAOptions
 	#tag EndProperty
 
 

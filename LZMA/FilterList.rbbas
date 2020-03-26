@@ -1,13 +1,36 @@
 #tag Class
 Protected Class FilterList
 	#tag Method, Flags = &h0
-		Sub Append(FilterID As UInt64, Options As MemoryBlock)
+		Sub Append(FilterID As UInt64, Options As LZMA.LZMAOptions)
 		  If Count >= 4 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  Dim filter As lzma_filter
 		  filter.ID = FilterID
-		  If Options <> Nil Then filter.Options = Options
+		  If Options <> Nil Then
+		    filter.Options = Options
+		  End If
 		  mFilters.Append(filter)
 		  mOptRefs.Append(Options)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Constructor(CopyFrom As LZMA.FilterList)
+		  ' Constructs a filter list by copying the CopyFrom parameter. 
+		  
+		  Dim copyto As New MemoryBlock((CopyFrom.mFilters.Ubound + 2) * lzma_filter.Size)
+		  Dim err As ErrorCodes = lzma_filters_copy(CopyFrom, copyto, Nil)
+		  If err <> ErrorCodes.OK Then Raise New LZMAException(err)
+		  
+		  Dim count As Integer = copyto.Size / lzma_filter.Size
+		  Dim index As Integer
+		  For index = 0 To count - 2
+		    Dim id As UInt64 = copyto.UInt64Value(index * lzma_filter.Size)
+		    Dim options As MemoryBlock = copyto.Ptr(index * lzma_filter.Size + 8)
+		    Dim opt As LZMAOptions
+		    If options <> Nil Then opt = New LZMAOptions(options)
+		    Me.Append(id, opt)
+		  Next
+		  mRef = copyto
 		End Sub
 	#tag EndMethod
 
@@ -24,7 +47,7 @@ Protected Class FilterList
 		    #Else
 		      Raise New PlatformNotSupportedException
 		    #endif
-		    Me.Append(FilterID, GetPresetOptions(Preset))
+		    Me.Append(FilterID, New LZMAOptions(Preset))
 		  End If
 		  
 		End Sub
@@ -49,7 +72,7 @@ Protected Class FilterList
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Insert(Index As Integer, FilterID As UInt64, Options As MemoryBlock)
+		Sub Insert(Index As Integer, FilterID As UInt64, Options As LZMA.LZMAOptions)
 		  If Count >= 3 Or Index > Count - 1 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  Dim filter As lzma_filter
 		  filter.ID = FilterID
@@ -57,6 +80,18 @@ Protected Class FilterList
 		  mFilters.Insert(Index, filter)
 		  mOptRefs.Insert(Index, Options)
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function IsDecoderSupported(FilterID As UInt64) As Boolean
+		  Return LZMA.IsAvailable And lzma_filter_decoder_is_supported(FilterID)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function IsEncoderSupported(FilterID As UInt64) As Boolean
+		  Return LZMA.IsAvailable And lzma_filter_encoder_is_supported(FilterID)
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -90,14 +125,15 @@ Protected Class FilterList
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Options(Index As Integer) As MemoryBlock
-		  Return mFilters(Index).Options
+		Function Options(Index As Integer) As LZMA.LZMAOptions
+		  Return mOptRefs(Index)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Options(Index As Integer, Assigns NewOpts As MemoryBlock)
+		Sub Options(Index As Integer, Assigns NewOpts As LZMA.LZMAOptions)
 		  mFilters(Index).Options = NewOpts
+		  mOptRefs(Index) = NewOpts
 		End Sub
 	#tag EndMethod
 
@@ -114,7 +150,11 @@ Protected Class FilterList
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mOptRefs() As MemoryBlock
+		Private mOptRefs() As LZMAOptions
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mRef As MemoryBlock
 	#tag EndProperty
 
 
