@@ -69,11 +69,11 @@ Begin Window DemoWindow
       Begin Slider CompressionLevel
          AutoDeactivate  =   True
          Enabled         =   True
-         Height          =   23
+         Height          =   18
          HelpTag         =   "Compression level (0-9)"
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
-         Left            =   30
+         Left            =   17
          LineStep        =   1
          LiveScroll      =   True
          LockBottom      =   ""
@@ -89,10 +89,10 @@ Begin Window DemoWindow
          TabPanelIndex   =   1
          TabStop         =   True
          TickStyle       =   2
-         Top             =   109
+         Top             =   112
          Value           =   6
          Visible         =   True
-         Width           =   177
+         Width           =   136
       End
       Begin Label CompressionLevelTxt
          AutoDeactivate  =   True
@@ -105,7 +105,7 @@ Begin Window DemoWindow
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   211
+         Left            =   155
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
@@ -122,7 +122,7 @@ Begin Window DemoWindow
          TextFont        =   "System"
          TextSize        =   0
          TextUnit        =   0
-         Top             =   112
+         Top             =   108
          Transparent     =   True
          Underline       =   ""
          Visible         =   True
@@ -424,8 +424,40 @@ Begin Window DemoWindow
       Period          =   100
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   30
+      Top             =   32
       Width           =   32
+   End
+   Begin CheckBox ExtremeFlagChkBx
+      AutoDeactivate  =   True
+      Bold            =   ""
+      Caption         =   "+Extreme"
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   187
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      State           =   0
+      TabIndex        =   7
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   108
+      Underline       =   ""
+      Value           =   False
+      Visible         =   True
+      Width           =   79
    End
 End
 #tag EndWindow
@@ -519,6 +551,7 @@ End
 		  CompressionLevelTxt.Enabled = Not CompressionLevelTxt.Enabled
 		  DecompressFileBtn.Enabled = Not DecompressFileBtn.Enabled
 		  EncoderList.Enabled = Not EncoderList.Enabled
+		  ExtremeFlagChkBx.Enabled = (Not ExtremeFlagChkBx.Enabled And EncoderList.Text <> "LZMA1")
 		  LZMAFlag_Concatenate.Enabled = Not LZMAFlag_Concatenate.Enabled
 		  LZMAFlag_IgnoreCheck.Enabled = Not LZMAFlag_IgnoreCheck.Enabled
 		  MemoryLimitTxt.Enabled = Not MemoryLimitTxt.Enabled
@@ -578,6 +611,8 @@ End
 		Sub Action()
 		  If mResult <> LZMA.ErrorCodes.OK Then Call MsgBox("Error number " + Str(mResult), 16, "Error") Else MsgBox("Success!")
 		  mWorker = Nil
+		  mDestination = Nil
+		  mSource = Nil
 		  Self.Title = "liblzma Demo"
 		  ProgressTimer.Mode = Timer.ModeOff
 		  ToggleLockUI()
@@ -597,9 +632,18 @@ End
 		  If mWorker <> Nil Then Return
 		  mSource = GetOpenFolderItem("")
 		  If mSource = Nil Then Return
-		  mDestination = GetSaveFolderItem(FileTypes1.XZCompressedFile, mSource.Name + ".xz")
+		  mCodec = EncoderList.RowTag(EncoderList.ListIndex)
+		  Select Case mCodec
+		  Case LZMA.Codec.XZ
+		    mDestination = GetSaveFolderItem(FileTypes1.XZCompressedFile, mSource.Name + ".xz")
+		  Case LZMA.Codec.lzma2
+		    mDestination = GetSaveFolderItem(FileTypes1.LZMA2CompressedFile, mSource.Name + ".lzma")
+		  Case LZMA.Codec.lzma1
+		    mDestination = GetSaveFolderItem(FileTypes1.LZMA1CompressedFile, mSource.Name + ".lzma1")
+		  End Select
 		  If mDestination = Nil Then Return
 		  mLevel = CompressionLevel.Value
+		  If ExtremeFlagChkBx.Value Then mLevel = mLevel Or LZMA.LZMA_PRESET_EXTREME
 		  mCodec = EncoderList.RowTag(EncoderList.ListIndex)
 		  mProgress = 0:0
 		  ToggleLockUI()
@@ -630,7 +674,7 @@ End
 	#tag Event
 		Sub Change()
 		  If Me.Text <> "CRC32" And EncoderList.Text = "LZMA1" Then
-		    Call MsgBox("The LZMA1 format supports only CRC32.", 16, "Invalid checksum type")
+		    Call MsgBox("The LZMA1 format supports only CRC32.", 48, "Invalid checksum type")
 		    Me.ListIndex = 0
 		  End If
 		End Sub
@@ -647,6 +691,30 @@ End
 		  Me.AddRow("LZMA2")
 		  Me.RowTag(2) = LZMA.Codec.lzma2
 		  Me.ListIndex = 0
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Change()
+		  If Me.Text = "LZMA1" Then
+		    If CheckTypeList.Text <> "CRC32" Then
+		      Call MsgBox("The LZMA1 format supports only CRC32.", 48, "Checksum type updated")
+		      CheckTypeList.ListIndex = 0
+		    End If
+		    If ExtremeFlagChkBx.Value Then
+		      Call MsgBox("The LZMA1 format does not support the +Extreme option.", 48, "+Extreme flag updated")
+		      ExtremeFlagChkBx.Value = False
+		    End If
+		    If CompressionLevel.Value = 0 Then
+		      Call MsgBox("The LZMA1 format does not support a compression level of zero.", 48, "Compression level updated")
+		      CompressionLevel.Value = 1
+		    End If
+		    CompressionLevel.Minimum = 1
+		  Else
+		    CompressionLevel.Minimum = 0
+		  End If
+		  
+		  ExtremeFlagChkBx.Enabled = (Me.Text <> "LZMA1")
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
