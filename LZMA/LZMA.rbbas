@@ -699,7 +699,7 @@ Protected Module LZMA
 		XZ
 		  lzma1
 		  Detect
-		lzma2=Codec.XZ
+		lzma2
 	#tag EndEnum
 
 	#tag Enum, Name = EncodeAction, Flags = &h1
