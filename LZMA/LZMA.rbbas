@@ -8,41 +8,6 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function CompressAsRaw(Filters As LZMA.FilterList, InputBuffer As MemoryBlock, ByRef OutputBuffer As MemoryBlock) As LZMA.ErrorCodes
-		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
-		  If OutputBuffer = Nil Then OutputBuffer = New MemoryBlock(CompressBound(InputBuffer.Size))
-		  Dim pos As UInt32
-		  Dim err As ErrorCodes = lzma_raw_buffer_encode(Filters, Nil, InputBuffer, InputBuffer.Size, OutputBuffer, pos, OutputBuffer.Size)
-		  If err = ErrorCodes.OK Then OutputBuffer.Size = pos
-		  Return err
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function CompressAsXZ(Filters As LZMA.FilterList, InputBuffer As MemoryBlock, ByRef OutputBuffer As MemoryBlock, Checksum As LZMA.ChecksumType) As LZMA.ErrorCodes
-		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
-		  If OutputBuffer = Nil Then OutputBuffer = New MemoryBlock(CompressBound(InputBuffer.Size))
-		  Dim pos As UInt32
-		  Dim err As ErrorCodes = lzma_stream_buffer_encode(Filters, Checksum, Nil, InputBuffer, InputBuffer.Size, OutputBuffer, pos, OutputBuffer.Size)
-		  If err = ErrorCodes.OK Then OutputBuffer.Size = pos
-		  Return err
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function CompressAsXZ(Preset As UInt32, InputBuffer As MemoryBlock, ByRef OutputBuffer As MemoryBlock, Checksum As LZMA.ChecksumType) As LZMA.ErrorCodes
-		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
-		  If OutputBuffer = Nil Then OutputBuffer = New MemoryBlock(CompressBound(InputBuffer.Size))
-		  Dim pos As UInt32
-		  Dim err As ErrorCodes = lzma_easy_buffer_encode(Preset, Checksum, Nil, InputBuffer, InputBuffer.Size, OutputBuffer, pos, OutputBuffer.Size)
-		  If err = ErrorCodes.OK Then OutputBuffer.Size = pos
-		  Return err
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function CompressBound(UncompressedSize As UInt32) As UInt32
 		  If IsAvailable Then Return lzma_stream_buffer_bound(UncompressedSize)
 		End Function
@@ -103,34 +68,6 @@ Protected Module LZMA
 		  Dim err As ErrorCodes = lzma_vli_decode(VLI, VLIPosition, EncodedForm, BufferPosition, EncodedForm.Size)
 		  If err <> ErrorCodes.StreamEnd Then Raise New LZMAException(err)
 		  Return VLI
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function Decompress(Filters As LZMA.FilterList, InputBuffer As MemoryBlock, OutputBuffer As MemoryBlock) As LZMA.ErrorCodes
-		  Return Decompress(Filters, InputBuffer, OutputBuffer, 0, 0)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function Decompress(Filters As LZMA.FilterList, InputBuffer As MemoryBlock, OutputBuffer As MemoryBlock, Flags As UInt32, MemoryLimit As UInt64) As LZMA.ErrorCodes
-		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
-		  Dim inpos, outpos As UInt32
-		  Dim err As ErrorCodes
-		  If Filters <> Nil Then
-		    err = lzma_raw_buffer_decode(Filters, Nil, InputBuffer, inpos, InputBuffer.Size, OutputBuffer, outpos, OutputBuffer.Size)
-		  Else
-		    If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
-		    err = lzma_stream_buffer_decode(MemoryLimit, Flags, Nil, InputBuffer, inpos, InputBuffer.Size, OutputBuffer, outpos, OutputBuffer.Size)
-		  End If
-		  If err = ErrorCodes.OK Then OutputBuffer.Size = outpos
-		  Return err
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function Decompress(InputBuffer As MemoryBlock, OutputBuffer As MemoryBlock, Optional Flags As UInt32, Optional MemoryLimit As UInt64) As LZMA.ErrorCodes
-		  Return Decompress(Nil, InputBuffer, OutputBuffer, Flags, MemoryLimit)
 		End Function
 	#tag EndMethod
 
