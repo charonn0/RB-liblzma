@@ -14,6 +14,7 @@ Implements Readable,Writeable
 		    Catch
 		    End Try
 		  End If
+		  If mLastTotals = Nil Then mLastTotals = TotalIn:TotalOut
 		  mSource = Nil
 		  mDestination = Nil
 		  mCompressor = Nil
@@ -337,6 +338,10 @@ Implements Readable,Writeable
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mLastTotals As Pair
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mReadBuffer As String
 	#tag EndProperty
 
@@ -355,6 +360,8 @@ Implements Readable,Writeable
 			    Return mCompressor.TotalIn
 			  ElseIf mDecompressor <> Nil Then
 			    Return mDecompressor.TotalIn
+			  ElseIf mLastTotals <> Nil Then
+			    Return mLastTotals.Left
 			  End If
 			End Get
 		#tag EndGetter
@@ -368,6 +375,8 @@ Implements Readable,Writeable
 			    Return mCompressor.TotalOut
 			  ElseIf mDecompressor <> Nil Then
 			    Return mDecompressor.TotalOut
+			  ElseIf mLastTotals <> Nil Then
+			    Return mLastTotals.Right
 			  End If
 			End Get
 		#tag EndGetter
