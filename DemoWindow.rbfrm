@@ -636,11 +636,11 @@ End
 		  mCodec = EncoderList.RowTag(EncoderList.ListIndex)
 		  Select Case mCodec
 		  Case LZMA.Codec.XZ
-		    mDestination = GetSaveFolderItem(FileTypes1.XZCompressedFile, mSource.Name + ".xz")
+		    mDestination = GetSaveFolderItem(LZMAFileTypes.XZCompressedFile, mSource.Name + ".xz")
 		  Case LZMA.Codec.lzma2
-		    mDestination = GetSaveFolderItem(FileTypes1.LZMA2CompressedFile, mSource.Name + ".lzma")
+		    mDestination = GetSaveFolderItem(LZMAFileTypes.LZMA2CompressedFile, mSource.Name + ".lzma")
 		  Case LZMA.Codec.lzma1
-		    mDestination = GetSaveFolderItem(FileTypes1.LZMA1CompressedFile, mSource.Name + ".lzma1")
+		    mDestination = GetSaveFolderItem(LZMAFileTypes.LZMA1CompressedFile, mSource.Name + ".lzma1")
 		  End Select
 		  If mDestination = Nil Then Return
 		  mLevel = CompressionLevel.Value
@@ -725,7 +725,7 @@ End
 	#tag Event
 		Sub Action()
 		  If mWorker <> Nil Then Return
-		  mSource = GetOpenFolderItem(FileTypes1.All)
+		  mSource = GetOpenFolderItem(LZMAFileTypes.All)
 		  If mSource = Nil Then Return
 		  Dim name As String = mSource.Name
 		  Dim ext As String = NthField(name, ".", CountFields(name, "."))
@@ -737,11 +737,11 @@ End
 		  If LZMAFlag_Concatenate.Value Then mDecoderFlags = mDecoderFlags Or LZMA.LZMA_CONCATENATED
 		  If LZMAFlag_IgnoreCheck.Value Then mDecoderFlags = mDecoderFlags Or LZMA.LZMA_IGNORE_CHECK
 		  Select Case ext
-		  Case FileTypes1.XZCompressedFile.Extensions
+		  Case LZMAFileTypes.XZCompressedFile.Extensions
 		    mCodec = LZMA.Codec.XZ
-		  Case FileTypes1.LZMA1CompressedFile.Extensions
+		  Case LZMAFileTypes.LZMA1CompressedFile.Extensions
 		    mCodec = LZMA.Codec.lzma1
-		  Case FileTypes1.LZMA2CompressedFile.Extensions
+		  Case LZMAFileTypes.LZMA2CompressedFile.Extensions
 		    mCodec = LZMA.Codec.lzma2
 		  Else
 		    mCodec = LZMA.Codec.Detect
