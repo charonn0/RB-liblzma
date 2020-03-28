@@ -96,6 +96,7 @@ Protected Class FilterList
 
 	#tag Method, Flags = &h0
 		Function Operator_Convert() As Ptr
+		  'If mRef <> Nil Then Return mRef
 		  Dim count As Integer = UBound(mFilters)
 		  If count > 4 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  If count < 1 Then
