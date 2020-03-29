@@ -5,7 +5,7 @@ Implements LZMA.Compressor
 	#tag Method, Flags = &h0
 		Sub Constructor(Preset As UInt32, Checksum As LZMA.ChecksumType, Extreme As Boolean = False)
 		  ' Constructs an encoder that uses the XZ file format.
-		  ' Preset is the compression level (1-9)
+		  ' Preset is the compression level (0-9)
 		  ' Checksum is the type of Checksum to use
 		  ' If Extreme=True then slower techniques are used to maximize compression
 		  
