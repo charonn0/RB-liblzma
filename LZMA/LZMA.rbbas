@@ -2,48 +2,17 @@
 Protected Module LZMA
 	#tag Method, Flags = &h1
 		Protected Function ChecksumLength(Type As LZMA.ChecksumType) As UInt32
+		  ' Returns the size, in bytes, of the specified checksum type.
+		  
 		  If Not IsAvailable Then Return 0
 		  Return lzma_check_size(Type)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function CompressAsRaw(Filters As LZMA.FilterList, InputBuffer As MemoryBlock, ByRef OutputBuffer As MemoryBlock) As LZMA.ErrorCodes
-		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
-		  If OutputBuffer = Nil Then OutputBuffer = New MemoryBlock(CompressBound(InputBuffer.Size))
-		  Dim pos As UInt32
-		  Dim err As ErrorCodes = lzma_raw_buffer_encode(Filters, Nil, InputBuffer, InputBuffer.Size, OutputBuffer, pos, OutputBuffer.Size)
-		  If err = ErrorCodes.OK Then OutputBuffer.Size = pos
-		  Return err
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function CompressAsXZ(Filters As LZMA.FilterList, InputBuffer As MemoryBlock, ByRef OutputBuffer As MemoryBlock, Checksum As LZMA.ChecksumType) As LZMA.ErrorCodes
-		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
-		  If OutputBuffer = Nil Then OutputBuffer = New MemoryBlock(CompressBound(InputBuffer.Size))
-		  Dim pos As UInt32
-		  Dim err As ErrorCodes = lzma_stream_buffer_encode(Filters, Checksum, Nil, InputBuffer, InputBuffer.Size, OutputBuffer, pos, OutputBuffer.Size)
-		  If err = ErrorCodes.OK Then OutputBuffer.Size = pos
-		  Return err
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function CompressAsXZ(Preset As UInt32, InputBuffer As MemoryBlock, ByRef OutputBuffer As MemoryBlock, Checksum As LZMA.ChecksumType) As LZMA.ErrorCodes
-		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
-		  If OutputBuffer = Nil Then OutputBuffer = New MemoryBlock(CompressBound(InputBuffer.Size))
-		  Dim pos As UInt32
-		  Dim err As ErrorCodes = lzma_easy_buffer_encode(Preset, Checksum, Nil, InputBuffer, InputBuffer.Size, OutputBuffer, pos, OutputBuffer.Size)
-		  If err = ErrorCodes.OK Then OutputBuffer.Size = pos
-		  Return err
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function CompressBound(UncompressedSize As UInt32) As UInt32
+		  ' Returns the upper bound of the compressed size after compression of UncompressedSize bytes.
+		  
 		  If IsAvailable Then Return lzma_stream_buffer_bound(UncompressedSize)
 		End Function
 	#tag EndMethod
@@ -90,6 +59,8 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h1
 		Protected Function DecoderMemoryUse(Preset As UInt32) As UInt64
+		  ' Returns the anticipated memory use, in bytes, of a decoder using the specified Preset level.
+		  
 		  If Not IsAvailable Then Return 0
 		  Return lzma_easy_decoder_memusage(Preset)
 		End Function
@@ -97,6 +68,8 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h1
 		Protected Function DecodeUInt64(EncodedForm As MemoryBlock) As UInt64
+		  ' Decodes a variable-length integer (VLI) into a UInt64 value.
+		  
 		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
 		  Dim VLIPosition, BufferPosition As UInt32
 		  Dim VLI As UInt64
@@ -107,35 +80,9 @@ Protected Module LZMA
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function Decompress(Filters As LZMA.FilterList, InputBuffer As MemoryBlock, OutputBuffer As MemoryBlock) As LZMA.ErrorCodes
-		  Return Decompress(Filters, InputBuffer, OutputBuffer, 0, 0)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function Decompress(Filters As LZMA.FilterList, InputBuffer As MemoryBlock, OutputBuffer As MemoryBlock, Flags As UInt32, MemoryLimit As UInt64) As LZMA.ErrorCodes
-		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
-		  Dim inpos, outpos As UInt32
-		  Dim err As ErrorCodes
-		  If Filters <> Nil Then
-		    err = lzma_raw_buffer_decode(Filters, Nil, InputBuffer, inpos, InputBuffer.Size, OutputBuffer, outpos, OutputBuffer.Size)
-		  Else
-		    If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
-		    err = lzma_stream_buffer_decode(MemoryLimit, Flags, Nil, InputBuffer, inpos, InputBuffer.Size, OutputBuffer, outpos, OutputBuffer.Size)
-		  End If
-		  If err = ErrorCodes.OK Then OutputBuffer.Size = outpos
-		  Return err
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function Decompress(InputBuffer As MemoryBlock, OutputBuffer As MemoryBlock, Optional Flags As UInt32, Optional MemoryLimit As UInt64) As LZMA.ErrorCodes
-		  Return Decompress(Nil, InputBuffer, OutputBuffer, Flags, MemoryLimit)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function EncoderMemoryUse(Preset As UInt32) As UInt64
+		  ' Returns the anticipated memory use of an encoder using the specified Preset level.
+		  
 		  If Not IsAvailable Then Return 0
 		  Return lzma_easy_encoder_memusage(Preset)
 		End Function
@@ -143,6 +90,8 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h1
 		Protected Function EncodeUInt64(VLI As UInt64) As MemoryBlock
+		  ' Encodes a UInt64 value as a variable-length integer (VLI).
+		  
 		  If Not LZMA.IsAvailable Then Raise New PlatformNotSupportedException
 		  Dim sz As UInt32 = lzma_vli_size(VLI)
 		  If sz < 1 Then Raise New LZMAException(ErrorCodes.ProgError)
@@ -156,6 +105,15 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h1
 		Protected Function GetCompressor(Codec As LZMA.Codec, Preset As UInt32, Checksum As LZMA.ChecksumType) As LZMA.Compressor
+		  ' Returns an instance of a subclass of LZMAEngine which implements the Compressor interface. 
+		  ' The returned object may be passed to LZMAStream.Constructor(Compressor, Writeable) or may
+		  ' be used directly.
+		  ' The Codec parameter specifies what sort of container format should be used. Codec.Detect
+		  ' is equivalent to Codec.XZ.
+		  ' The Preset parameter may be between 0 and 9 (LZMA2, XZ) or 1-9 (LZMA1). A Preset value greater
+		  ' than 9 is interpreted as level 9 with the LZMA_PRESET_EXTREME flag; values greater than 9
+		  ' are not supported for LZMA1. Additionally, LZMA1 supports only ChecksumType.CRC32.
+		  
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
 		    Return New LZMA.Codecs.XZEncoder(Preset, Nil, Checksum)
@@ -170,6 +128,15 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h1
 		Protected Function GetDecompressor(Codec As LZMA.Codec, MemoryLimit As UInt64, Flags As UInt32) As LZMA.Decompressor
+		  ' Returns an instance of a subclass of LZMAEngine which implements the Decompressor interface.
+		  ' The returned object may be passed to LZMAStream.Constructor(Decompressor, Readable) or may
+		  ' be used directly.
+		  ' The Codec parameter specifies what sort of container format was used. Codec.Detect can detect
+		  ' XZ and LZMA2, but not LZMA1.
+		  ' The MemoryLimit parameter determines how much memory the Decompressor may use. A MemoryLimit
+		  ' of zero means no limit.
+		  ' Flags may be zero or more decoder flags. 
+		  
 		  Select Case Codec
 		  Case LZMA.Codec.XZ
 		    Return New LZMA.Codecs.XZDecoder(MemoryLimit, Flags)
@@ -183,6 +150,8 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h1
 		Protected Function IsAvailable() As Boolean
+		  ' Returns True is liblzma is available at runtime.
+		  
 		  Static avail As Boolean
 		  If Not avail Then avail = System.IsFunctionAvailable("lzma_easy_encoder", "liblzma")
 		  Return avail
@@ -191,6 +160,9 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h1
 		Protected Function IsChecksumTypeAvailable(Type As LZMA.ChecksumType) As Boolean
+		  ' Returns True if the installed version of liblzma supports the specified ChecksumType.
+		  ' Decoding is still possible by specifying the LZMA_IGNORE_CHECK flag when creating the decoder.
+		  
 		  If Not IsAvailable Then Return False
 		  Return lzma_check_is_supported(Type)
 		End Function
@@ -212,7 +184,7 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h0
 		Function IsXZCompressed(Extends TargetFile As FolderItem) As Boolean
-		  //Checks the XZ magic number. Returns True if the TargetFile is likely a XZ stream
+		  ' Checks the XZ magic number. Returns True if the TargetFile is likely a XZ stream
 		  
 		  If Not TargetFile.Exists Then Return False
 		  If TargetFile.Directory Then Return False
@@ -232,7 +204,7 @@ Protected Module LZMA
 
 	#tag Method, Flags = &h0
 		Function IsXZCompressed(Extends Target As MemoryBlock) As Boolean
-		  //Checks the XZ magic number. Returns True if the Target is likely a XZ stream
+		  ' Checks the XZ magic number. Returns True if the Target is likely a XZ stream
 		  
 		  If Target.Size = -1 Then Return False
 		  Dim bs As BinaryStream

@@ -393,6 +393,38 @@ Begin Window DemoWindow
          Visible         =   True
          Width           =   100
       End
+      Begin CheckBox ExtremeFlagChkBx
+         AutoDeactivate  =   True
+         Bold            =   ""
+         Caption         =   "+Extreme"
+         DataField       =   ""
+         DataSource      =   ""
+         Enabled         =   True
+         Height          =   20
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   179
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         State           =   0
+         TabIndex        =   5
+         TabPanelIndex   =   1
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   0
+         TextUnit        =   0
+         Top             =   108
+         Underline       =   ""
+         Value           =   False
+         Visible         =   True
+         Width           =   79
+      End
    End
    Begin ProgressBar ProgressBar1
       AutoDeactivate  =   True
@@ -426,38 +458,6 @@ Begin Window DemoWindow
       TabPanelIndex   =   0
       Top             =   32
       Width           =   32
-   End
-   Begin CheckBox ExtremeFlagChkBx
-      AutoDeactivate  =   True
-      Bold            =   ""
-      Caption         =   "+Extreme"
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   ""
-      Left            =   187
-      LockBottom      =   ""
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   ""
-      LockTop         =   True
-      Scope           =   0
-      State           =   0
-      TabIndex        =   7
-      TabPanelIndex   =   0
-      TabStop         =   True
-      TextFont        =   "System"
-      TextSize        =   0
-      TextUnit        =   0
-      Top             =   108
-      Underline       =   ""
-      Value           =   False
-      Visible         =   True
-      Width           =   79
    End
 End
 #tag EndWindow
@@ -552,6 +552,7 @@ End
 		  DecompressFileBtn.Enabled = Not DecompressFileBtn.Enabled
 		  EncoderList.Enabled = Not EncoderList.Enabled
 		  ExtremeFlagChkBx.Enabled = (Not ExtremeFlagChkBx.Enabled And EncoderList.Text <> "LZMA1")
+		  Label1.Enabled = Not Label1.Enabled
 		  LZMAFlag_Concatenate.Enabled = Not LZMAFlag_Concatenate.Enabled
 		  LZMAFlag_IgnoreCheck.Enabled = Not LZMAFlag_IgnoreCheck.Enabled
 		  MemoryLimitTxt.Enabled = Not MemoryLimitTxt.Enabled
@@ -635,11 +636,11 @@ End
 		  mCodec = EncoderList.RowTag(EncoderList.ListIndex)
 		  Select Case mCodec
 		  Case LZMA.Codec.XZ
-		    mDestination = GetSaveFolderItem(FileTypes1.XZCompressedFile, mSource.Name + ".xz")
+		    mDestination = GetSaveFolderItem(LZMAFileTypes.XZCompressedFile, mSource.Name + ".xz")
 		  Case LZMA.Codec.lzma2
-		    mDestination = GetSaveFolderItem(FileTypes1.LZMA2CompressedFile, mSource.Name + ".lzma")
+		    mDestination = GetSaveFolderItem(LZMAFileTypes.LZMA2CompressedFile, mSource.Name + ".lzma")
 		  Case LZMA.Codec.lzma1
-		    mDestination = GetSaveFolderItem(FileTypes1.LZMA1CompressedFile, mSource.Name + ".lzma1")
+		    mDestination = GetSaveFolderItem(LZMAFileTypes.LZMA1CompressedFile, mSource.Name + ".lzma1")
 		  End Select
 		  If mDestination = Nil Then Return
 		  mLevel = CompressionLevel.Value
@@ -709,8 +710,10 @@ End
 		      CompressionLevel.Value = 1
 		    End If
 		    CompressionLevel.Minimum = 1
+		    CompressionLevel.HelpTag = "Compression level (1-9)"
 		  Else
 		    CompressionLevel.Minimum = 0
+		    CompressionLevel.HelpTag = "Compression level (0-9)"
 		  End If
 		  
 		  ExtremeFlagChkBx.Enabled = (Me.Text <> "LZMA1")
@@ -722,16 +725,28 @@ End
 	#tag Event
 		Sub Action()
 		  If mWorker <> Nil Then Return
-		  mSource = GetOpenFolderItem("")
+		  mSource = GetOpenFolderItem(LZMAFileTypes.All)
 		  If mSource = Nil Then Return
 		  Dim name As String = mSource.Name
-		  If Right(name, 3) = ".xz" Then name = Left(name, name.Len - 3)
+		  Dim ext As String = NthField(name, ".", CountFields(name, "."))
+		  name = Replace(name, "." + ext, "")
 		  mDestination = GetSaveFolderItem("", name)
 		  If mDestination = Nil Then Return
 		  mDecoderFlags = 0
 		  mProgress = 0:0
 		  If LZMAFlag_Concatenate.Value Then mDecoderFlags = mDecoderFlags Or LZMA.LZMA_CONCATENATED
 		  If LZMAFlag_IgnoreCheck.Value Then mDecoderFlags = mDecoderFlags Or LZMA.LZMA_IGNORE_CHECK
+		  Select Case ext
+		  Case LZMAFileTypes.XZCompressedFile.Extensions
+		    mCodec = LZMA.Codec.XZ
+		  Case LZMAFileTypes.LZMA1CompressedFile.Extensions
+		    mCodec = LZMA.Codec.lzma1
+		  Case LZMAFileTypes.LZMA2CompressedFile.Extensions
+		    mCodec = LZMA.Codec.lzma2
+		  Else
+		    mCodec = LZMA.Codec.Detect
+		  End Select
+		  
 		  If Val(MemoryLimitTxt.Text) > 0 Then
 		    mMemoryLimit = Val(MemoryLimitTxt.Text) * 1024 * 1024
 		  Else

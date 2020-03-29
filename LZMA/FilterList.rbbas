@@ -2,6 +2,8 @@
 Protected Class FilterList
 	#tag Method, Flags = &h0
 		Sub Append(FilterID As UInt64, Options As LZMA.LZMAOptions)
+		  ' Appends the FilterID and Options to the list. 
+		  
 		  If Count >= 4 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  Dim filter As lzma_filter
 		  filter.ID = FilterID
@@ -15,7 +17,7 @@ Protected Class FilterList
 
 	#tag Method, Flags = &h0
 		Sub Constructor(CopyFrom As LZMA.FilterList)
-		  ' Constructs a filter list by copying the CopyFrom parameter. 
+		  ' Constructs a filter list by copying the CopyFrom parameter.
 		  
 		  Dim copyto As New MemoryBlock((CopyFrom.mFilters.Ubound + 2) * lzma_filter.Size)
 		  Dim err As ErrorCodes = lzma_filters_copy(CopyFrom, copyto, Nil)
@@ -55,24 +57,34 @@ Protected Class FilterList
 
 	#tag Method, Flags = &h0
 		Function Count() As Integer
+		  ' Returns the number of filters in the list
+		  
 		  Return UBound(mFilters) + 1
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function FilterID(Index As Integer) As UInt64
+		  ' Update the FilterID for the filter at Index
+		  
 		  Return mFilters(Index).ID
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub FilterID(Index As Integer, Assigns NewFilter As UInt64)
+		  ' Get the FilterID for the filter at Index
+		  
 		  mFilters(Index).ID = NewFilter
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Insert(Index As Integer, FilterID As UInt64, Options As LZMA.LZMAOptions)
+		  ' Inserts the FilterID and Options to the list at the specified index.
+		  ' Existing filters are shifted down the list unless there is no more room
+		  ' in the list, in which case an exception will be raised.
+		  
 		  If Count >= 3 Or Index > Count - 1 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  Dim filter As lzma_filter
 		  filter.ID = FilterID
@@ -84,18 +96,24 @@ Protected Class FilterList
 
 	#tag Method, Flags = &h0
 		 Shared Function IsDecoderSupported(FilterID As UInt64) As Boolean
+		  ' Returns True if the installed version of liblzma supports decoding the specified FilterID.
+		  
 		  Return LZMA.IsAvailable And lzma_filter_decoder_is_supported(FilterID)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		 Shared Function IsEncoderSupported(FilterID As UInt64) As Boolean
+		  ' Returns True if the installed version of liblzma supports encoding the specified FilterID.
+		  
 		  Return LZMA.IsAvailable And lzma_filter_encoder_is_supported(FilterID)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Operator_Convert() As Ptr
+		  ' Returns a Ptr to a MemoryBlock generated from the list of filters.
+		  
 		  Dim count As Integer = UBound(mFilters)
 		  If count > 4 Then Raise New LZMAException(ErrorCodes.ProgError)
 		  If count < 1 Then
@@ -119,6 +137,9 @@ Protected Class FilterList
 
 	#tag Method, Flags = &h0
 		Function Operator_Subscript(Index As Integer) As lzma_options_lzma
+		  ' Returns the lzma_options_lzma structure at Index. Can only be called
+		  ' from within the LZMA module.
+		  
 		  Dim p As Ptr = Me.Options(Index)
 		  Return p.lzma_options_lzma
 		End Function
@@ -126,12 +147,16 @@ Protected Class FilterList
 
 	#tag Method, Flags = &h0
 		Function Options(Index As Integer) As LZMA.LZMAOptions
+		  ' Returns an LZMAOptions object corresponding to the options for the filter at Index.
+		  
 		  Return mOptRefs(Index)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Options(Index As Integer, Assigns NewOpts As LZMA.LZMAOptions)
+		  ' Updates the options for the filter at Index.
+		  
 		  mFilters(Index).Options = NewOpts
 		  mOptRefs(Index) = NewOpts
 		End Sub
@@ -139,6 +164,8 @@ Protected Class FilterList
 
 	#tag Method, Flags = &h0
 		Sub Remove(Index As Integer)
+		  ' Removes the filter at Index.
+		  
 		  mFilters.Remove(Index)
 		  mOptRefs.Remove(Index)
 		End Sub

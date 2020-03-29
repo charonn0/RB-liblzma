@@ -1,5 +1,5 @@
 #tag Class
-Protected Class LZMAStream
+Class LZMAStream
 Implements Readable,Writeable
 	#tag Method, Flags = &h0
 		Sub Close()
@@ -14,6 +14,7 @@ Implements Readable,Writeable
 		    Catch
 		    End Try
 		  End If
+		  If mLastTotals = Nil Then mLastTotals = TotalIn:TotalOut
 		  mSource = Nil
 		  mDestination = Nil
 		  mCompressor = Nil
@@ -72,16 +73,18 @@ Implements Readable,Writeable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Create(OutputStream As FolderItem, Preset As UInt32, Overwrite As Boolean = False) As LZMA.LZMAStream
-		  ' Create a compression stream where compressed output is written to the OutputStream file.
+		 Shared Function Create(OutputStream As FolderItem, Preset As UInt32, Checksum As LZMA.ChecksumType = LZMA.ChecksumType.CRC32, Overwrite As Boolean = False) As LZMA.LZMAStream
+		  ' Create an xz compression stream where compressed output is written to the OutputStream file.
+		  ' Preset is the compression level (0-9). Checksum is the type of checksum to use.
 		  
-		  Return Create(BinaryStream.Create(OutputStream, Overwrite), Preset)
+		  Return Create(BinaryStream.Create(OutputStream, Overwrite), Preset, Checksum)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		 Shared Function Create(OutputStream As Writeable, Preset As UInt32, Checksum As LZMA.ChecksumType = LZMA.ChecksumType.CRC32) As LZMA.LZMAStream
-		  ' Create a compression stream where compressed output is written to the OutputStream object.
+		  ' Create an xz compression stream where compressed output is written to the OutputStream object.
+		  ' Preset is the compression level (0-9). Checksum is the type of checksum to use.
 		  
 		  Return New LZMAStream(GetCompressor(Codec.Detect, Preset, Checksum), OutputStream)
 		  
@@ -155,18 +158,20 @@ Implements Readable,Writeable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Open(InputStream As FolderItem) As LZMA.LZMAStream
+		 Shared Function Open(InputStream As FolderItem, Codec As LZMA.Codec = LZMA.Codec.Detect) As LZMA.LZMAStream
 		  ' Create a decompression stream where the compressed input is read from the Source file.
+		  ' Codec.Detect is equivalent to Codec.XZ
 		  
-		  Return Open(BinaryStream.Open(InputStream))
+		  Return Open(BinaryStream.Open(InputStream), Codec)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Open(InputStream As Readable) As LZMA.LZMAStream
+		 Shared Function Open(InputStream As Readable, Codec As LZMA.Codec = LZMA.Codec.Detect) As LZMA.LZMAStream
 		  ' Create a decompression stream where the compressed input is read from the InputStream object.
+		  ' Codec.Detect is equivalent to Codec.XZ
 		  
-		  Return New LZMAStream(GetDecompressor(Codec.Detect, 0, 0), InputStream)
+		  Return New LZMAStream(GetDecompressor(Codec, 0, 0), InputStream)
 		  
 		End Function
 	#tag EndMethod
@@ -337,6 +342,10 @@ Implements Readable,Writeable
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mLastTotals As Pair
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mReadBuffer As String
 	#tag EndProperty
 
@@ -355,6 +364,8 @@ Implements Readable,Writeable
 			    Return mCompressor.TotalIn
 			  ElseIf mDecompressor <> Nil Then
 			    Return mDecompressor.TotalIn
+			  ElseIf mLastTotals <> Nil Then
+			    Return mLastTotals.Left
 			  End If
 			End Get
 		#tag EndGetter
@@ -368,6 +379,8 @@ Implements Readable,Writeable
 			    Return mCompressor.TotalOut
 			  ElseIf mDecompressor <> Nil Then
 			    Return mDecompressor.TotalOut
+			  ElseIf mLastTotals <> Nil Then
+			    Return mLastTotals.Right
 			  End If
 			End Get
 		#tag EndGetter
