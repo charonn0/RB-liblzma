@@ -7,7 +7,7 @@ Implements LZMA.Decompressor
 		  ' Constructs a decoder for raw LZMA
 		  
 		  Super.Constructor()
-
+		  
 		  If Header <> Nil And Header.Size > 0 Then
 		    Filters(1).DictionarySize = _
 		    (Header.UInt8Value(5) And &hFF) Or _
@@ -30,6 +30,7 @@ Implements LZMA.Decompressor
 
 	#tag Method, Flags = &h1
 		Protected Function MemoryUse_() As UInt64
+		  ' Overrides LZMAEngine.MemoryUse_
 		  If IsOpen Then Return lzma_raw_decoder_memusage(mFilters)
 		End Function
 	#tag EndMethod

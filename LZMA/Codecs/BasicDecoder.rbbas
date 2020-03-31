@@ -4,14 +4,14 @@ Inherits LZMA.LZMAEngine
 Implements LZMA.Decompressor
 	#tag Method, Flags = &h0
 		Sub Constructor(MemoryLimit As UInt64, Flags As UInt32)
-		  ' Constructs a decoder that detects the XZ and LZMA2 formats.
-		  ' MemoryLimit defines the maximum memory use; specify zero to disable memory limiting.
+		  ' Constructs a decoder that detects the XZ and LZMA2 formats. MemoryLimit
+		  ' defines the maximum memory use; specify zero to disable memory limiting.
 		  ' Flags may be zero or more of the following flags:
-		  ' LZMA_TELL_NO_CHECK
-		  ' LZMA_TELL_UNSUPPORTED_CHECK
-		  ' LZMA_TELL_ANY_CHECK
-		  ' LZMA_IGNORE_CHECK
-		  ' LZMA_CONCATENATED
+		  '   LZMA_TELL_NO_CHECK
+		  '   LZMA_TELL_UNSUPPORTED_CHECK
+		  '   LZMA_TELL_ANY_CHECK
+		  '   LZMA_IGNORE_CHECK
+		  '   LZMA_CONCATENATED
 		  
 		  Super.Constructor()
 		  If MemoryLimit = 0 Then MemoryLimit = UINT64_MAX
