@@ -130,12 +130,15 @@ Protected Module LZMA
 		Protected Function GetDecompressor(Codec As LZMA.Codec, MemoryLimit As UInt64, Flags As UInt32) As LZMA.Decompressor
 		  ' Returns an instance of a subclass of LZMAEngine which implements the Decompressor interface.
 		  ' The returned object may be passed to LZMAStream.Constructor(Decompressor, Readable) or may
-		  ' be used directly.
-		  ' The Codec parameter specifies what sort of container format was used. Codec.Detect can detect
-		  ' XZ and LZMA2, but not LZMA1.
-		  ' The MemoryLimit parameter determines how much memory the Decompressor may use. A MemoryLimit
-		  ' of zero means no limit.
-		  ' Flags may be zero or more decoder flags. 
+		  ' be used directly. The Codec parameter specifies what sort of container format was used.
+		  ' Codec.Detect can detect XZ and LZMA2, but not LZMA1. The MemoryLimit parameter determines how
+		  ' much memory the Decompressor may use. A MemoryLimit of zero means no limit. Flags may be zero
+		  ' or more of the following flags:
+		  '   LZMA_TELL_NO_CHECK
+		  '   LZMA_TELL_UNSUPPORTED_CHECK
+		  '   LZMA_TELL_ANY_CHECK
+		  '   LZMA_IGNORE_CHECK
+		  '   LZMA_CONCATENATED
 		  
 		  Select Case Codec
 		  Case LZMA.Codec.XZ

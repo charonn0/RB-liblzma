@@ -1,5 +1,5 @@
 #tag Class
-Class LZMAStream
+Protected Class LZMAStream
 Implements Readable,Writeable
 	#tag Method, Flags = &h0
 		Sub Close()
