@@ -6,11 +6,11 @@
 The minimum supported liblzma version is 5.2.4. The minimum supported Xojo version is RS2009R3.
 
 ## Hilights
-* Read and write compressed file or memory streams using a simple [BinaryStream work-alike](https://github.com/charonn0/RB-lzma/wiki/LZMA.LZMAStream).
+* Read and write compressed file or memory streams using a simple [BinaryStream work-alike](https://github.com/charonn0/RB-liblzma/wiki/LZMA.LZMAStream).
 * Supports LZMA2, LZMA1, and XZ compressed streams
 
 ## Getting started
-The recommended way to compress or decompress data is with the [`LZMAStream`](https://github.com/charonn0/RB-lzma/wiki/LZMA.LZMAStream) class. The `LZMAStream` is a `BinaryStream` work-alike, and implements both the `Readable` and `Writeable` interfaces. Anything [written](https://github.com/charonn0/RB-lzma/wiki/LZMA.LZMAStream.Write) to a `LZMAStream` is compressed and emitted to the output stream (another `Writeable`); [reading](https://github.com/charonn0/RB-lzma/wiki/LZMA.LZMAStream.Read) from a `LZMAStream` decompresses data from the input stream (another `Readable`).
+The recommended way to compress or decompress data is with the [`LZMAStream`](https://github.com/charonn0/RB-liblzma/wiki/LZMA.LZMAStream) class. The `LZMAStream` is a `BinaryStream` work-alike, and implements both the `Readable` and `Writeable` interfaces. Anything [written](https://github.com/charonn0/RB-liblzma/wiki/LZMA.LZMAStream.Write) to a `LZMAStream` is compressed and emitted to the output stream (another `Writeable`); [reading](https://github.com/charonn0/RB-liblzma/wiki/LZMA.LZMAStream.Read) from a `LZMAStream` decompresses data from the input stream (another `Readable`).
 
 Instances of `LZMAStream` can be created from MemoryBlocks, FolderItems, and objects that implement the `Readable` and/or `Writeable` interfaces. For example, creating an in-memory compression stream from a zero-length MemoryBlock and writing a string to it:
 
@@ -31,7 +31,7 @@ The string will be processed through the compressor and written to the `output` 
 The other way to use LZMA is through the Encoder and Decoder classes found in the Codecs submodule. These classes provide a low-level wrapper to the LZMA API. All compression and decompression done using the `LZMAStream` class is ultimately carried out by an instance of an Encoder and Decoder class, respectively.
 
 ```vbnet
-  ' compress
+  // compress
   Dim encoder As New LZMA.Codecs.BasicEncoder(6, LZMA.ChecksumType.CRC32)
   Dim src As MemoryBlock = "Hello, world!"
   Dim inputstream As New BinaryStream(src)
@@ -45,7 +45,7 @@ The other way to use LZMA is through the Encoder and Decoder classes found in th
   inputstream.Close
   outputstream.Close
   
-  ' decompress
+  // decompress
   Dim decoder As New LZMA.Codecs.BasicDecoder(0, 0)
   Dim result As New MemoryBlock(0)
   inputstream = New BinaryStream(dst)
@@ -65,8 +65,8 @@ The other way to use LZMA is through the Encoder and Decoder classes found in th
 
 ## How to incorporate LZMA into your Realbasic/Xojo project
 ### Import the `LZMA` module
-1. Download the RB-lzma project either in [ZIP archive format](https://github.com/charonn0/RB-lzma/archive/master.zip) or by cloning the repository with your Git client.
-2. Open the RB-lzma project in REALstudio or Xojo. Open your project in a separate window.
+1. Download the RB-liblzma project either in [ZIP archive format](https://github.com/charonn0/RB-liblzma/archive/master.zip) or by cloning the repository with your Git client.
+2. Open the RB-liblzma project in REALstudio or Xojo. Open your project in a separate window.
 3. Copy the `LZMA` module into your project and save.
 
 ### Ensure the LZMA shared library is installed
@@ -74,4 +74,4 @@ LZMA is installed by default on some Unix-like operating systems, but may need t
 
 Windows does not have it installed by default, you will need to ship the DLL with your application. You can download pre-built binaries from the [XZ project page](https://tukaani.org/xz/), or you can build them yourself from source (ibid.)
 
-RB-lzma will raise a PlatformNotSupportedException when used if all required DLLs/SOs/DyLibs are not available at runtime. 
+RB-liblzma will raise a PlatformNotSupportedException when used if all required DLLs/SOs/DyLibs are not available at runtime. 
