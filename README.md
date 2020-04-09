@@ -31,7 +31,7 @@ The string will be processed through the compressor and written to the `output` 
 The other way to use LZMA is through the Encoder and Decoder classes found in the Codecs submodule. These classes provide a low-level wrapper to the LZMA API. All compression and decompression done using the `LZMAStream` class is ultimately carried out by an instance of an Encoder and Decoder class, respectively.
 
 ```vbnet
-  // compress
+  ' compress
   Dim encoder As New LZMA.Codecs.BasicEncoder(6, LZMA.ChecksumType.CRC32)
   Dim src As MemoryBlock = "Hello, world!"
   Dim inputstream As New BinaryStream(src)
@@ -45,7 +45,7 @@ The other way to use LZMA is through the Encoder and Decoder classes found in th
   inputstream.Close
   outputstream.Close
   
-  // decompress
+  ' decompress
   Dim decoder As New LZMA.Codecs.BasicDecoder(0, 0)
   Dim result As New MemoryBlock(0)
   inputstream = New BinaryStream(dst)
