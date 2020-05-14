@@ -6,40 +6,65 @@ Inherits RuntimeException
 		  Me.ErrorNumber = Integer(Error)
 		  Select Case Error
 		  Case ErrorCodes.StreamEnd
-		    Me.Message = "End of stream was reached"
+		    mErrorName = "StreamEnd"
+		    Me.Message = "End-of-Stream was reached."
 		    
 		  Case ErrorCodes.NoCheck
-		    Me.Message = "Input stream has no integrity check"
+		    mErrorName = "NoCheck"
+		    Me.Message = "The input stream has no integrity check."
 		    
 		  Case ErrorCodes.UnsupportedCheck
-		    Me.Message = "Cannot calculate the integrity check"
+		    mErrorName = "UnsupportedCheck"
+		    Me.Message = "The integrity check type is not supported."
 		    
 		  Case ErrorCodes.GetCheck
-		    Me.Message = "Integrity check type is now available"
+		    mErrorName = "GetCheck"
+		    Me.Message = "The integrity check type is now available."
 		    
 		  Case ErrorCodes.MemError
-		    Me.Message = "Cannot allocate memory"
+		    mErrorName = "MemError"
+		    Me.Message = "Out of memory."
 		    
 		  Case ErrorCodes.MemLimitError
-		    Me.Message = "Memory usage limit was reached"
+		    mErrorName = "MemLimitError"
+		    Me.Message = "The memory usage limit was reached."
 		    
 		  Case ErrorCodes.FormatError
-		    Me.Message = "File format not recognized"
+		    mErrorName = "FormatError"
+		    Me.Message = "The file format is not recognized."
 		    
 		  Case ErrorCodes.OptionsError
-		    Me.Message = "Invalid or unsupported options"
+		    mErrorName = "OptionsError"
+		    Me.Message = "The specified options are invalid or unsupported."
 		    
 		  Case ErrorCodes.DataError
-		    Me.Message = "Data is corrupt"
+		    mErrorName = "DataError"
+		    Me.Message = "The input data are corrupt."
 		    
 		  Case ErrorCodes.BuffError
-		    Me.Message = "No progress is possible"
+		    mErrorName = "BuffError"
+		    Me.Message = "No progress is possible because the output buffer is full."
 		    
 		  Case ErrorCodes.ProgError
-		    Me.Message = "Programming error"
+		    mErrorName = "ProgError"
+		    Me.Message = "Programming error."
 		  End Select
 		End Sub
 	#tag EndMethod
+
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mErrorName
+			End Get
+		#tag EndGetter
+		ErrorName As String
+	#tag EndComputedProperty
+
+	#tag Property, Flags = &h21
+		Private mErrorName As String
+	#tag EndProperty
 
 
 	#tag ViewBehavior
