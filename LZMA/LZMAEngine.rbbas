@@ -129,10 +129,10 @@ Protected Class LZMAEngine
 
 
 	#tag Note, Name = About this class
-		all of
-		the methods of the Compressor and Decompressor interfaces, but does not actually Implement
-		either Interface.
-		the shared
+		This abstract class is the common ancestor for all the encoder and decoder classes. It supplies the 
+		concrete methods for the Compressor and Decompressor interfaces implemented by its subclasses, but 
+		does not implement either interface itself. The subclasses usually only implement their own Constructor
+		methods and nothing else.
 	#tag EndNote
 
 
