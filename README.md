@@ -28,7 +28,7 @@ The string will be processed through the compressor and written to the `output` 
 ```
 
 ### Encoder and Decoder classes
-The other way to use LZMA is through the Encoder and Decoder classes found in the Codecs submodule. These classes provide a low-level wrapper to the LZMA API. All compression and decompression done using the `LZMAStream` class is ultimately carried out by an instance of an Encoder and Decoder class, respectively.
+The other way to use LZMA is through the Encoder and Decoder classes found in the Codecs submodule. These classes provide a low-level wrapper to the LZMA API. All compression and decompression done using the `LZMAStream` class is ultimately carried out by an instance of an Encoder and Decoder class, respectively. You can construct instances directly, or use the [GetCompressor](https://github.com/charonn0/RB-liblzma/wiki/LZMA.GetCompressor) and [GetDecompressor](https://github.com/charonn0/RB-liblzma/wiki/LZMA.GetDecompressor) helper methods.
 
 ```vbnet
   ' compress
