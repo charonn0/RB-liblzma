@@ -14,7 +14,7 @@ The recommended way to compress or decompress data is with the [`LZMAStream`](ht
 
 Instances of `LZMAStream` can be created from MemoryBlocks, FolderItems, and objects that implement the `Readable` and/or `Writeable` interfaces. For example, creating an in-memory compression stream from a zero-length MemoryBlock and writing a string to it:
 
-```vbnet
+```realbasic
   Dim output As New MemoryBlock(0)
   Dim lz As New LZMA.LZMAStream(output) ' zero-length creates a compressor
   lz.Write("Hello, world!")
@@ -22,7 +22,7 @@ Instances of `LZMAStream` can be created from MemoryBlocks, FolderItems, and obj
 ```
 The string will be processed through the compressor and written to the `output` MemoryBlock. To create a decompressor pass a MemoryBlock whose size is > 0 (continuing from above):
 
-```vbnet
+```realbasic
   lz = New LZMA.LZMAStream(output) ' output contains the compressed string
   MsgBox(lz.Read(256)) ' read the decompressed string
 ```
@@ -30,7 +30,7 @@ The string will be processed through the compressor and written to the `output` 
 ### Encoder and Decoder classes
 The other way to use LZMA is through the Encoder and Decoder classes found in the Codecs submodule. These classes provide a low-level wrapper to the LZMA API. All compression and decompression done using the `LZMAStream` class is ultimately carried out by an instance of an Encoder and Decoder class, respectively. You can construct instances directly, or use the [GetCompressor](https://github.com/charonn0/RB-liblzma/wiki/LZMA.GetCompressor) and [GetDecompressor](https://github.com/charonn0/RB-liblzma/wiki/LZMA.GetDecompressor) helper methods.
 
-```vbnet
+```realbasic
   ' compress
   Dim encoder As New LZMA.Codecs.BasicEncoder(6, LZMA.ChecksumType.CRC32)
   Dim src As MemoryBlock = "Hello, world!"
