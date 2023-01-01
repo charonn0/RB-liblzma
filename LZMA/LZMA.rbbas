@@ -440,7 +440,7 @@ Protected Module LZMA
 	#tag Note, Name = Copying
 		RB-lzma (https://github.com/charonn0/RB-lzma)
 		
-		Copyright (c)2020 Andrew Lambert, all rights reserved.
+		Copyright (c)2020-23 Andrew Lambert, all rights reserved.
 		
 		 Permission to use, copy, modify, and distribute this software for any purpose
 		 with or without fee is hereby granted, provided that the above copyright
