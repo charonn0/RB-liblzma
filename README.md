@@ -60,9 +60,6 @@ The other way to use LZMA is through the Encoder and Decoder classes found in th
   MsgBox(result)
 ```
 
-## More examples
-
-
 ## How to incorporate LZMA into your Realbasic/Xojo project
 ### Import the `LZMA` module
 1. Download the RB-liblzma project either in [ZIP archive format](https://github.com/charonn0/RB-liblzma/archive/master.zip) or by cloning the repository with your Git client.
