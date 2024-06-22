@@ -9,6 +9,9 @@ The minimum supported liblzma version is 5.2.4. The minimum supported Xojo versi
 * Read and write compressed file or memory streams using a simple [BinaryStream work-alike](https://github.com/charonn0/RB-liblzma/wiki/LZMA.LZMAStream).
 * Supports LZMA2, LZMA1, and XZ compressed streams
 
+## Become a sponsor
+If you use this code in a commercial project, or just want to show your appreciation, please consider sponsoring me through GitHub. https://github.com/sponsors/charonn0
+
 ## Getting started
 The recommended way to compress or decompress data is with the [`LZMAStream`](https://github.com/charonn0/RB-liblzma/wiki/LZMA.LZMAStream) class. The `LZMAStream` is a `BinaryStream` work-alike, and implements both the `Readable` and `Writeable` interfaces. Anything [written](https://github.com/charonn0/RB-liblzma/wiki/LZMA.LZMAStream.Write) to a `LZMAStream` is compressed and emitted to the output stream (another `Writeable`); [reading](https://github.com/charonn0/RB-liblzma/wiki/LZMA.LZMAStream.Read) from a `LZMAStream` decompresses data from the input stream (another `Readable`).
 
